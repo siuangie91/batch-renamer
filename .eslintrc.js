@@ -24,7 +24,6 @@ module.exports = {
     },
   },
   rules: {
-    'prettier/prettier': ['error'],
     'no-multiple-empty-lines': ['error', { max: 2, maxEOF: 1 }],
     'arrow-parens': ['error', 'as-needed'],
     'arrow-body-style': ['warn', 'as-needed'],
