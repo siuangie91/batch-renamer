@@ -1,0 +1,30 @@
+{
+  "name": "batch-renamer",
+  "version": "1.0.0",
+  "description": "Simple node app to rename files",
+  "main": "index.js",
+  "author": "Angie Siu",
+  "license": "MIT",
+  "scripts": {
+    "dev:build": "tsc -w",
+    "dev:run": "nodemon build/index.js",
+    "dev": "concurrently yarn:dev:*"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "concurrently": "^7.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-json": "^3.1.0",
+    "prettier": "^2.6.0",
+    "typescript": "^4.6.2"
+  },
+  "dependencies": {
+    "espree": "^9.3.1",
+    "nodemon": "^2.0.15"
+  }
+}
