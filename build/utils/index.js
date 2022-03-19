@@ -7,6 +7,10 @@ exports.renameToNewFile = exports.createLeadingZeroes = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const createLeadingZeroes = (numFiles, index) => {
+    // always have a leading zero
+    if (numFiles < 10) {
+        return '0';
+    }
     const digits = numFiles.toString();
     const idx = index.toString();
     const numOfZeroesToCreate = digits.length - idx.length;
@@ -22,8 +26,8 @@ const renameToNewFile = ({ originFolder, originalFile, targetFolder, numFiles, i
     const basename = path_1.default.basename(originalFile, extension);
     console.log('🗂 ', basename, extension);
     const leadingZeroes = (0, exports.createLeadingZeroes)(numFiles, index);
-    const targetFileName = `${prefix}-${leadingZeroes}${index + 1}${extension}`;
-    fs_1.default.copyFileSync(`${originFolder}/${originalFile}`, `${targetFolder}/${targetFileName}`);
-    console.log('🗳 ', targetFileName);
+    const targetFile = `${prefix}-${leadingZeroes}${index + 1}${extension}`;
+    fs_1.default.copyFileSync(`${originFolder}/${originalFile}`, `${targetFolder}/${targetFile}`);
+    console.log('🗳 ', targetFile);
 };
 exports.renameToNewFile = renameToNewFile;

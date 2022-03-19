@@ -5,6 +5,11 @@ export const createLeadingZeroes = (
   numFiles: number,
   index: number
 ): string => {
+  // always have a leading zero
+  if (numFiles < 10) {
+    return '0';
+  }
+
   const digits = numFiles.toString();
   const idx = index.toString();
 
@@ -39,12 +44,12 @@ export const renameToNewFile = ({
 
   const leadingZeroes = createLeadingZeroes(numFiles, index);
 
-  const targetFileName = `${prefix}-${leadingZeroes}${index + 1}${extension}`;
+  const targetFile = `${prefix}-${leadingZeroes}${index + 1}${extension}`;
 
   fs.copyFileSync(
     `${originFolder}/${originalFile}`,
-    `${targetFolder}/${targetFileName}`
+    `${targetFolder}/${targetFile}`
   );
 
-  console.log('🗳 ', targetFileName);
+  console.log('🗳 ', targetFile);
 };
