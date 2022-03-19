@@ -25,17 +25,16 @@ if (!fs_1.default.existsSync(targetFolder)) {
     console.log('🛠 Created target folder', targetFolder);
 }
 const files = fs_1.default.readdirSync(originFolder);
-if (!files) {
+if (!(files === null || files === void 0 ? void 0 : files.length)) {
     throw new Error(`❌ Failed to read origin folder at path: ${originFolder}`);
 }
-const leadingZeroes = (0, utils_1.createLeadingZeros)(files);
 files.forEach((file, index) => {
     (0, utils_1.renameToNewFile)({
         originFolder,
         originalFile: file,
         targetFolder,
+        numFiles: files.length,
         index,
-        leadingZeroes,
         prefix: newPrefix,
     });
 });

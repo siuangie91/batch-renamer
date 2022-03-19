@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { createLeadingZeros, renameToNewFile } from './utils';
+import { renameToNewFile } from './utils';
 
 const args = process.argv.slice(2);
 
@@ -36,19 +36,17 @@ if (!fs.existsSync(targetFolder)) {
 
 const files = fs.readdirSync(originFolder);
 
-if (!files) {
+if (!files?.length) {
   throw new Error(`❌ Failed to read origin folder at path: ${originFolder}`);
 }
-
-const leadingZeroes = createLeadingZeros(files);
 
 files.forEach((file, index) => {
   renameToNewFile({
     originFolder,
     originalFile: file,
     targetFolder,
+    numFiles: files.length,
     index,
-    leadingZeroes,
     prefix: newPrefix,
   });
 });
