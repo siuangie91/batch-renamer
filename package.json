@@ -11,6 +11,7 @@
     "dev": "concurrently yarn:dev:*",
     "batch-rename": "node build/",
     "test": "jest",
+    "test:watch": "yarn run test --watch",
     "build": "tsc -p tsconfig.build.json"
   },
   "devDependencies": {
