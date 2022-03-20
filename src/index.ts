@@ -34,13 +34,13 @@ if (!fs.existsSync(targetFolder)) {
   console.log('🛠 Created target folder', targetFolder);
 }
 
-const files = fs.readdirSync(originFolder);
+const files: string[] = fs.readdirSync(originFolder);
 
 if (!files?.length) {
   throw new Error(`❌ Failed to read origin folder at path: ${originFolder}`);
 }
 
-files.forEach((file, index) => {
+files.forEach((file: string, index: number): void => {
   renameToNewFile({
     originFolder,
     originalFile: file,
