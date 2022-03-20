@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { createLeadingZeroes, renameToNewFile } from '..';
+import { createLeadingZeroes, createTargetFileName, renameToNewFile } from '..';
 
 jest.mock('fs', () => {
   const originalModule = jest.requireActual('fs');
@@ -27,8 +27,11 @@ jest.mock('path', () => {
 
 describe('utils', () => {
   describe('createLeadingZeroes', () => {
-    it('returns a string of zeroes based to match the number of files', () => {
+    it('returns "0" if there are <10 files', () => {
       expect(createLeadingZeroes(9, 1)).toBe('0'); // 01
+    });
+
+    it('returns a string of zeroes based to match the number of files', () => {
       expect(createLeadingZeroes(10, 1)).toBe('0'); // 01
       expect(createLeadingZeroes(10, 10)).toBe(''); // 10
       expect(createLeadingZeroes(99, 10)).toBe(''); // 99
@@ -41,6 +44,24 @@ describe('utils', () => {
       expect(createLeadingZeroes(1000, 10)).toBe('00'); // 0010
       expect(createLeadingZeroes(1000, 110)).toBe('0'); // 0110
       expect(createLeadingZeroes(9999, 1110)).toBe(''); // 1110
+    });
+  });
+
+  describe('createTargetFileName', () => {
+    it('returns the file name that the file should be renamed as', () => {
+      const prefix = 'prefix';
+      const extension = '.png';
+      const numFiles = 100;
+      const index = 22;
+
+      const result = createTargetFileName({
+        prefix,
+        extension,
+        numFiles,
+        index,
+      });
+
+      expect(result).toBe('prefix-023.png');
     });
   });
 
