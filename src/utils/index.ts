@@ -1,6 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 
+/**
+ * Returns a string of zeroes, like "000" based on the total
+ * number of files and the index of the current file
+ * @param numFiles total number of files to rename
+ * @param index index of file to rename
+ * @returns a string of zeroes
+ */
 export const createLeadingZeroes = (
   numFiles: number,
   index: number
@@ -23,6 +30,31 @@ export const createLeadingZeroes = (
   return leadingZeroes;
 };
 
+/**
+ * Creates the file name to rename the file as
+ * @param props
+ * @returns new file name
+ */
+export const createTargetFileName = ({
+  prefix,
+  extension,
+  numFiles,
+  index,
+}: {
+  prefix: string;
+  extension: string;
+  numFiles: number;
+  index: number;
+}): string => {
+  const leadingZeroes = createLeadingZeroes(numFiles, index);
+
+  return `${prefix}-${leadingZeroes}${index + 1}${extension}`;
+};
+
+/**
+ * Renames a given file
+ * @param props
+ */
 export const renameToNewFile = ({
   originFolder,
   originalFile,
@@ -42,9 +74,12 @@ export const renameToNewFile = ({
   const basename = path.basename(originalFile, extension);
   console.log('🗂 ', basename, extension);
 
-  const leadingZeroes = createLeadingZeroes(numFiles, index);
-
-  const targetFile = `${prefix}-${leadingZeroes}${index + 1}${extension}`;
+  const targetFile = createTargetFileName({
+    prefix,
+    extension,
+    numFiles,
+    index,
+  });
 
   fs.copyFileSync(
     `${originFolder}/${originalFile}`,
