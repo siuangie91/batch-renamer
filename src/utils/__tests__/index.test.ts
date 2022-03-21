@@ -48,20 +48,39 @@ describe('utils', () => {
   });
 
   describe('createTargetFileName', () => {
-    it('returns the file name that the file should be renamed as', () => {
+    describe('returns the file name that the file should be renamed as', () => {
       const prefix = 'prefix';
       const extension = '.png';
       const numFiles = 100;
-      const index = 22;
+      const index = 2;
 
-      const result = createTargetFileName({
-        prefix,
-        extension,
-        numFiles,
-        index,
+      test('when there is a >0 custom starting index', () => {
+        const customStartingIndex = 23;
+
+        const result = createTargetFileName({
+          prefix,
+          extension,
+          numFiles,
+          customStartingIndex,
+          index,
+        });
+
+        expect(result).toBe('prefix-025.png');
       });
 
-      expect(result).toBe('prefix-023.png');
+      test('when there is no custom starting index (is 0)', () => {
+        const customStartingIndex = 0;
+
+        const result = createTargetFileName({
+          prefix,
+          extension,
+          numFiles,
+          customStartingIndex,
+          index,
+        });
+
+        expect(result).toBe('prefix-002.png');
+      });
     });
   });
 
@@ -74,6 +93,7 @@ describe('utils', () => {
         numFiles: 10,
         index: 0,
         prefix: 'prefix',
+        customStartingIndex: 0,
       };
 
       const expectedCopyFileSyncArgs = [
