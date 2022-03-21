@@ -5,16 +5,13 @@ import path from 'path';
  * Returns a string of zeroes, like "000" based on the total
  * number of files and the index of the current file
  * @param numFiles total number of files to rename
- * @param index index of file to rename
+ * @param fileIndex index of file to rename
  * @returns a string of zeroes
  */
-export const createLeadingZeroes = ({
-  numFiles,
-  fileIndex,
-}: {
-  numFiles: number;
-  fileIndex: number;
-}): string => {
+export const createLeadingZeroes = (
+  numFiles: number,
+  fileIndex: number
+): string => {
   // always have a leading zero
   if (fileIndex < 10 && numFiles < 10) {
     return '0';
@@ -53,11 +50,8 @@ export const createTargetFileName = ({
   customStartingIndex: number;
   index: number;
 }): string => {
-  const fileIndex = customStartingIndex + index + 1;
-  const leadingZeroes = createLeadingZeroes({
-    numFiles,
-    fileIndex,
-  });
+  const fileIndex = customStartingIndex + index;
+  const leadingZeroes = createLeadingZeroes(numFiles, fileIndex);
 
   return `${prefix}-${leadingZeroes}${fileIndex}${extension}`;
 };
