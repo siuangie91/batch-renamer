@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { createLeadingZeroes, createTargetFileName, renameToNewFile } from '..';
+import { createFileNumber, createTargetFileName, renameToNewFile } from '..';
 
 jest.mock('fs', () => {
   const originalModule = jest.requireActual('fs');
@@ -26,42 +26,51 @@ jest.mock('path', () => {
 });
 
 describe('utils', () => {
-  describe('createLeadingZeroes', () => {
-    it('returns "0" if there are <10 files', () => {
-      expect(createLeadingZeroes(9, 1)).toBe('0'); // 01
+  describe('createFileNumber', () => {
+    it('returns with right amount of leading zeroes if will result in file numbers that are <1000', () => {
+      expect(createFileNumber(3, 0)).toBe('003');
+      expect(createFileNumber(33, 5)).toBe('038');
+      expect(createFileNumber(333, 100)).toBe('433');
     });
 
-    it('returns a string of zeroes based to match the number of files', () => {
-      expect(createLeadingZeroes(10, 1)).toBe('0'); // 01
-      expect(createLeadingZeroes(10, 10)).toBe(''); // 10
-      expect(createLeadingZeroes(99, 10)).toBe(''); // 99
-
-      expect(createLeadingZeroes(100, 1)).toBe('00'); // 001
-      expect(createLeadingZeroes(100, 10)).toBe('0'); // 010
-      expect(createLeadingZeroes(999, 110)).toBe(''); // 110
-
-      expect(createLeadingZeroes(1000, 1)).toBe('000'); // 0001
-      expect(createLeadingZeroes(1000, 10)).toBe('00'); // 0010
-      expect(createLeadingZeroes(1000, 110)).toBe('0'); // 0110
-      expect(createLeadingZeroes(9999, 1110)).toBe(''); // 1110
+    it('returns without leading zeroes if will result in file numbers that are >=1000', () => {
+      expect(createFileNumber(1000, 1)).toBe('1001');
+      expect(createFileNumber(1001, 99)).toBe('1100');
+      expect(createFileNumber(10000, 999)).toBe('10999');
     });
   });
 
   describe('createTargetFileName', () => {
-    it('returns the file name that the file should be renamed as', () => {
+    describe('returns the file name that the file should be renamed as', () => {
       const prefix = 'prefix';
       const extension = '.png';
-      const numFiles = 100;
-      const index = 22;
+      const index = 2;
 
-      const result = createTargetFileName({
-        prefix,
-        extension,
-        numFiles,
-        index,
+      test('when there is a >0 custom starting index', () => {
+        const customStartingIndex = 23;
+
+        const result = createTargetFileName({
+          prefix,
+          extension,
+          customStartingIndex,
+          index,
+        });
+
+        expect(result).toBe('prefix-025.png');
       });
 
-      expect(result).toBe('prefix-023.png');
+      test('when there is no custom starting index (is 0)', () => {
+        const customStartingIndex = 0;
+
+        const result = createTargetFileName({
+          prefix,
+          extension,
+          customStartingIndex,
+          index,
+        });
+
+        expect(result).toBe('prefix-001.png');
+      });
     });
   });
 
@@ -74,11 +83,12 @@ describe('utils', () => {
         numFiles: 10,
         index: 0,
         prefix: 'prefix',
+        customStartingIndex: 0,
       };
 
       const expectedCopyFileSyncArgs = [
         'originFolder/original.js',
-        'targetFolder/prefix-01.js',
+        'targetFolder/prefix-001.js',
       ];
 
       renameToNewFile(args);

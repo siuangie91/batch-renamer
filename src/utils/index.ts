@@ -1,33 +1,18 @@
 import fs from 'fs';
 import path from 'path';
+import padWithLeadingZeroes from 'leading-zeroes';
 
-/**
- * Returns a string of zeroes, like "000" based on the total
- * number of files and the index of the current file
- * @param numFiles total number of files to rename
- * @param index index of file to rename
- * @returns a string of zeroes
- */
-export const createLeadingZeroes = (
-  numFiles: number,
+export const createFileNumber = (
+  customStartingIndex: number,
   index: number
 ): string => {
-  // always have a leading zero
-  if (numFiles < 10) {
-    return '0';
-  }
+  const fileIndex =
+    customStartingIndex < 1
+      ? customStartingIndex + 1
+      : customStartingIndex + index;
 
-  const digits = numFiles.toString();
-  const idx = index.toString();
-
-  const numOfZeroesToCreate = digits.length - idx.length;
-
-  let leadingZeroes = '';
-  for (let i = 0; i < numOfZeroesToCreate; i += 1) {
-    leadingZeroes += '0';
-  }
-
-  return leadingZeroes;
+  const fileNumber = padWithLeadingZeroes(fileIndex, 3);
+  return fileNumber;
 };
 
 /**
@@ -38,17 +23,17 @@ export const createLeadingZeroes = (
 export const createTargetFileName = ({
   prefix,
   extension,
-  numFiles,
+  customStartingIndex,
   index,
 }: {
   prefix: string;
   extension: string;
-  numFiles: number;
+  customStartingIndex: number;
   index: number;
 }): string => {
-  const leadingZeroes = createLeadingZeroes(numFiles, index);
+  const fileNumber = createFileNumber(customStartingIndex, index);
 
-  return `${prefix}-${leadingZeroes}${index + 1}${extension}`;
+  return `${prefix}-${fileNumber}${extension}`;
 };
 
 /**
@@ -59,14 +44,14 @@ export const renameToNewFile = ({
   originFolder,
   originalFile,
   targetFolder,
-  numFiles,
+  customStartingIndex,
   index,
   prefix,
 }: {
   originFolder: string;
   originalFile: string;
   targetFolder: string;
-  numFiles: number;
+  customStartingIndex: number;
   index: number;
   prefix: string;
 }): void => {
@@ -77,7 +62,7 @@ export const renameToNewFile = ({
   const targetFile = createTargetFileName({
     prefix,
     extension,
-    numFiles,
+    customStartingIndex,
     index,
   });
 

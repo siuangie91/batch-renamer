@@ -12,6 +12,8 @@ const targetFolder = path.relative(__dirname, `../${targetFolderName}`);
 
 const newPrefix = args[1];
 
+const customStartingIndex = parseInt(args[2], 10) || 0;
+
 if (!originFolderName || !newPrefix) {
   throw new Error('❌ Missing args. Requires originFolderName and newPrefix');
 }
@@ -45,7 +47,7 @@ files.forEach((file: string, index: number): void => {
     originFolder,
     originalFile: file,
     targetFolder,
-    numFiles: files.length,
+    customStartingIndex,
     index,
     prefix: newPrefix,
   });

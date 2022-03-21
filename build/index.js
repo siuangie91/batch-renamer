@@ -12,6 +12,7 @@ const originFolder = path_1.default.relative(__dirname, `../${originFolderName}`
 const targetFolderName = `${originFolderName}_renamed`;
 const targetFolder = path_1.default.relative(__dirname, `../${targetFolderName}`);
 const newPrefix = args[1];
+const customStartingIndex = parseInt(args[2], 10) || 0;
 if (!originFolderName || !newPrefix) {
     throw new Error('❌ Missing args. Requires originFolderName and newPrefix');
 }
@@ -33,7 +34,7 @@ files.forEach((file, index) => {
         originFolder,
         originalFile: file,
         targetFolder,
-        numFiles: files.length,
+        customStartingIndex,
         index,
         prefix: newPrefix,
     });
