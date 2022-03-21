@@ -34,7 +34,6 @@ files.forEach((file, index) => {
         originFolder,
         originalFile: file,
         targetFolder,
-        numFiles: files.length,
         customStartingIndex,
         index,
         prefix: newPrefix,
