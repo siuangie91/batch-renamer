@@ -3,15 +3,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.renameToNewFile = exports.createTargetFileName = exports.createFileNumber = void 0;
+exports.renameToNewFile = exports.createTargetFileName = exports.createFileNumber = exports.padWithLeadingZeroes = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const leading_zeroes_1 = __importDefault(require("leading-zeroes"));
+const FILE_NUMBER_MIN_DIGITS = 3;
+const padWithLeadingZeroes = (fileIndex) => {
+    const digits = fileIndex.toString().length;
+    const numLeadingZeros = FILE_NUMBER_MIN_DIGITS - digits;
+    if (numLeadingZeros < 1)
+        return fileIndex.toString();
+    let leadingZeros = '';
+    for (let i = 0; i < numLeadingZeros; i += 1) {
+        leadingZeros += '0';
+    }
+    return `${leadingZeros}${fileIndex}`;
+};
+exports.padWithLeadingZeroes = padWithLeadingZeroes;
 const createFileNumber = (customStartingIndex, index) => {
     const fileIndex = customStartingIndex < 1
         ? customStartingIndex + 1
         : customStartingIndex + index;
-    const fileNumber = (0, leading_zeroes_1.default)(fileIndex, 3);
+    const fileNumber = (0, exports.padWithLeadingZeroes)(fileIndex);
     return fileNumber;
 };
 exports.createFileNumber = createFileNumber;
