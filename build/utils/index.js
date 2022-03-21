@@ -13,13 +13,14 @@ const path_1 = __importDefault(require("path"));
  * @param index index of file to rename
  * @returns a string of zeroes
  */
-const createLeadingZeroes = (numFiles, index) => {
+const createLeadingZeroes = ({ numFiles, fileIndex, }) => {
     // always have a leading zero
-    if (numFiles < 10) {
+    if (fileIndex < 10 && numFiles < 10) {
         return '0';
     }
-    const digits = numFiles.toString();
-    const idx = index.toString();
+    const totalNumFilesWithPrefix = numFiles + fileIndex; // 10 + 120 = 130 --> 131
+    const digits = totalNumFilesWithPrefix.toString();
+    const idx = fileIndex.toString();
     const numOfZeroesToCreate = digits.length - idx.length;
     let leadingZeroes = '';
     for (let i = 0; i < numOfZeroesToCreate; i += 1) {
@@ -33,16 +34,20 @@ exports.createLeadingZeroes = createLeadingZeroes;
  * @param props
  * @returns new file name
  */
-const createTargetFileName = ({ prefix, extension, numFiles, index, }) => {
-    const leadingZeroes = (0, exports.createLeadingZeroes)(numFiles, index);
-    return `${prefix}-${leadingZeroes}${index + 1}${extension}`;
+const createTargetFileName = ({ prefix, extension, numFiles, customStartingIndex, index, }) => {
+    const fileIndex = customStartingIndex + index + 1;
+    const leadingZeroes = (0, exports.createLeadingZeroes)({
+        numFiles,
+        fileIndex,
+    });
+    return `${prefix}-${leadingZeroes}${fileIndex}${extension}`;
 };
 exports.createTargetFileName = createTargetFileName;
 /**
  * Renames a given file
  * @param props
  */
-const renameToNewFile = ({ originFolder, originalFile, targetFolder, numFiles, index, prefix, }) => {
+const renameToNewFile = ({ originFolder, originalFile, targetFolder, numFiles, customStartingIndex, index, prefix, }) => {
     const extension = path_1.default.extname(originalFile);
     const basename = path_1.default.basename(originalFile, extension);
     console.log('🗂 ', basename, extension);
@@ -50,6 +55,7 @@ const renameToNewFile = ({ originFolder, originalFile, targetFolder, numFiles, i
         prefix,
         extension,
         numFiles,
+        customStartingIndex,
         index,
     });
     fs_1.default.copyFileSync(`${originFolder}/${originalFile}`, `${targetFolder}/${targetFile}`);

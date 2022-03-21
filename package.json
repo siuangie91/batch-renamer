@@ -6,9 +6,7 @@
   "author": "Angie Siu",
   "license": "MIT",
   "scripts": {
-    "dev:build": "tsc -w",
-    "dev:run": "nodemon build/index.js",
-    "dev": "concurrently yarn:dev:*",
+    "dev": "tsc -w",
     "batch-rename": "node build/",
     "test": "jest",
     "test:watch": "yarn run test --watch",

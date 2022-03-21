@@ -8,17 +8,22 @@ import path from 'path';
  * @param index index of file to rename
  * @returns a string of zeroes
  */
-export const createLeadingZeroes = (
-  numFiles: number,
-  index: number
-): string => {
+export const createLeadingZeroes = ({
+  numFiles,
+  fileIndex,
+}: {
+  numFiles: number;
+  fileIndex: number;
+}): string => {
   // always have a leading zero
-  if (numFiles < 10) {
+  if (fileIndex < 10 && numFiles < 10) {
     return '0';
   }
 
-  const digits = numFiles.toString();
-  const idx = index.toString();
+  const totalNumFilesWithPrefix = numFiles + fileIndex; // 10 + 120 = 130 --> 131
+
+  const digits = totalNumFilesWithPrefix.toString();
+  const idx = fileIndex.toString();
 
   const numOfZeroesToCreate = digits.length - idx.length;
 
@@ -39,16 +44,22 @@ export const createTargetFileName = ({
   prefix,
   extension,
   numFiles,
+  customStartingIndex,
   index,
 }: {
   prefix: string;
   extension: string;
   numFiles: number;
+  customStartingIndex: number;
   index: number;
 }): string => {
-  const leadingZeroes = createLeadingZeroes(numFiles, index);
+  const fileIndex = customStartingIndex + index + 1;
+  const leadingZeroes = createLeadingZeroes({
+    numFiles,
+    fileIndex,
+  });
 
-  return `${prefix}-${leadingZeroes}${index + 1}${extension}`;
+  return `${prefix}-${leadingZeroes}${fileIndex}${extension}`;
 };
 
 /**
@@ -60,6 +71,7 @@ export const renameToNewFile = ({
   originalFile,
   targetFolder,
   numFiles,
+  customStartingIndex,
   index,
   prefix,
 }: {
@@ -67,6 +79,7 @@ export const renameToNewFile = ({
   originalFile: string;
   targetFolder: string;
   numFiles: number;
+  customStartingIndex: number;
   index: number;
   prefix: string;
 }): void => {
@@ -78,6 +91,7 @@ export const renameToNewFile = ({
     prefix,
     extension,
     numFiles,
+    customStartingIndex,
     index,
   });
 
