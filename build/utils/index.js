@@ -18,10 +18,14 @@ const createLeadingZeroes = (numFiles, fileIndex) => {
     if (fileIndex < 10 && numFiles < 10) {
         return '0';
     }
-    const totalNumFilesWithPrefix = numFiles + fileIndex; // 10 + 120 = 130 --> 131
+    const totalNumFilesWithPrefix = numFiles + fileIndex;
+    console.log('totalNumFiles ✅', totalNumFilesWithPrefix);
     const digits = totalNumFilesWithPrefix.toString();
+    console.log('digits 🔍', digits);
     const idx = fileIndex.toString();
+    console.log('idx 🔍', idx);
     const numOfZeroesToCreate = digits.length - idx.length;
+    console.log('numOfZeroesToCreate 🌈', numOfZeroesToCreate);
     let leadingZeroes = '';
     for (let i = 0; i < numOfZeroesToCreate; i += 1) {
         leadingZeroes += '0';
