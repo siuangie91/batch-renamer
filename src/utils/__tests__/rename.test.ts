@@ -30,7 +30,7 @@ jest.mock('path', () => {
   };
 });
 
-describe('utils', () => {
+describe('utils/rename', () => {
   describe('padWithLeadingZeroes', () => {
     it('prepends 2 zeroes when fileIndex has 1 digit', () => {
       const result = padWithLeadingZeroes(1);
