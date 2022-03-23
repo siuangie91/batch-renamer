@@ -64,9 +64,9 @@ Run `yarn batch-rename --help` to see arguments/options.
   </tr>
 </table>
          
-### Example
+## Example
 
-#### Without starting index
+### Without starting index
 
 Given this folder on your desktop:
 
@@ -94,7 +94,7 @@ original_renamed # new folder, created if not already existing
   |_Renamed-002.png
 ```
 
-#### With starting index
+### With starting index
 
 Using that same [folder](#without-starting-index), rename all of the files with starting index of 300:
 
@@ -116,7 +116,7 @@ original_renamed # new folder, created if not already existing
 
 Useful when used with [`--target`](#with-specified-target-folder).
 
-#### With specified target folder
+### With specified target folder
 
 Given this folder structure on your desktop:
 
