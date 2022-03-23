@@ -19,13 +19,11 @@ export const padWithLeadingZeroes = (fileIndex: number): string => {
 };
 
 export const createFileNumber = (
-  customStartingIndex: number,
+  startingIndex: number,
   index: number
 ): string => {
   const fileIndex =
-    customStartingIndex < 1
-      ? customStartingIndex + 1
-      : customStartingIndex + index;
+    startingIndex < 1 ? startingIndex + 1 : startingIndex + index;
 
   const fileNumber = padWithLeadingZeroes(fileIndex);
   return fileNumber;
@@ -39,15 +37,15 @@ export const createFileNumber = (
 export const createTargetFileName = ({
   prefix,
   extension,
-  customStartingIndex,
+  startingIndex,
   index,
 }: {
   prefix: string;
   extension: string;
-  customStartingIndex: number;
+  startingIndex: number;
   index: number;
 }): string => {
-  const fileNumber = createFileNumber(customStartingIndex, index);
+  const fileNumber = createFileNumber(startingIndex, index);
 
   return `${prefix}-${fileNumber}${extension}`;
 };
@@ -60,14 +58,14 @@ export const renameToNewFile = ({
   originFolder,
   originalFile,
   targetFolder,
-  customStartingIndex,
+  startingIndex,
   index,
   prefix,
 }: {
   originFolder: string;
   originalFile: string;
   targetFolder: string;
-  customStartingIndex: number;
+  startingIndex: number;
   index: number;
   prefix: string;
 }): void => {
@@ -78,7 +76,7 @@ export const renameToNewFile = ({
   const targetFile = createTargetFileName({
     prefix,
     extension,
-    customStartingIndex,
+    startingIndex,
     index,
   });
 

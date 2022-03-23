@@ -19,10 +19,8 @@ const padWithLeadingZeroes = (fileIndex) => {
     return `${leadingZeros}${fileIndex}`;
 };
 exports.padWithLeadingZeroes = padWithLeadingZeroes;
-const createFileNumber = (customStartingIndex, index) => {
-    const fileIndex = customStartingIndex < 1
-        ? customStartingIndex + 1
-        : customStartingIndex + index;
+const createFileNumber = (startingIndex, index) => {
+    const fileIndex = startingIndex < 1 ? startingIndex + 1 : startingIndex + index;
     const fileNumber = (0, exports.padWithLeadingZeroes)(fileIndex);
     return fileNumber;
 };
@@ -32,8 +30,8 @@ exports.createFileNumber = createFileNumber;
  * @param props
  * @returns new file name
  */
-const createTargetFileName = ({ prefix, extension, customStartingIndex, index, }) => {
-    const fileNumber = (0, exports.createFileNumber)(customStartingIndex, index);
+const createTargetFileName = ({ prefix, extension, startingIndex, index, }) => {
+    const fileNumber = (0, exports.createFileNumber)(startingIndex, index);
     return `${prefix}-${fileNumber}${extension}`;
 };
 exports.createTargetFileName = createTargetFileName;
@@ -41,14 +39,14 @@ exports.createTargetFileName = createTargetFileName;
  * Renames a given file
  * @param props
  */
-const renameToNewFile = ({ originFolder, originalFile, targetFolder, customStartingIndex, index, prefix, }) => {
+const renameToNewFile = ({ originFolder, originalFile, targetFolder, startingIndex, index, prefix, }) => {
     const extension = path_1.default.extname(originalFile);
     const basename = path_1.default.basename(originalFile, extension);
     console.log('🗂 ', basename, extension);
     const targetFile = (0, exports.createTargetFileName)({
         prefix,
         extension,
-        customStartingIndex,
+        startingIndex,
         index,
     });
     fs_1.default.copyFileSync(`${originFolder}/${originalFile}`, `${targetFolder}/${targetFile}`);

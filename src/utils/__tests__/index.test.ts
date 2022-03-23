@@ -69,12 +69,12 @@ describe('utils', () => {
       const index = 2;
 
       test('when there is a >0 custom starting index', () => {
-        const customStartingIndex = 23;
+        const startingIndex = 23;
 
         const result = createTargetFileName({
           prefix,
           extension,
-          customStartingIndex,
+          startingIndex,
           index,
         });
 
@@ -82,12 +82,12 @@ describe('utils', () => {
       });
 
       test('when there is no custom starting index (is 0)', () => {
-        const customStartingIndex = 0;
+        const startingIndex = 0;
 
         const result = createTargetFileName({
           prefix,
           extension,
-          customStartingIndex,
+          startingIndex,
           index,
         });
 
@@ -105,7 +105,7 @@ describe('utils', () => {
         numFiles: 10,
         index: 0,
         prefix: 'prefix',
-        customStartingIndex: 0,
+        startingIndex: 0,
       };
 
       const expectedCopyFileSyncArgs = [

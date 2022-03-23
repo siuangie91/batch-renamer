@@ -5,17 +5,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const yargs_1 = __importDefault(require("yargs"));
 const utils_1 = require("./utils");
-const args = process.argv.slice(2);
-const originFolderName = args[0];
+const parsedArgs = (0, yargs_1.default)(process.argv.slice(2))
+    .option('originFolderName', {
+    alias: 'o',
+    type: 'string',
+    describe: 'Absolute path to original folder of files to rename',
+})
+    .option('prefix', {
+    alias: 'p',
+    type: 'string',
+    describe: 'Prefix for the renamed files',
+})
+    .option('startingIndex', {
+    alias: 's',
+    type: 'number',
+    describe: 'Custom starting index for renamed files',
+    default: 0,
+})
+    .demandOption(['originFolderName', 'prefix'], '❌ Missing args. Requires originFolderName and prefix')
+    .parse(process.argv.slice(2));
+const { originFolderName, prefix, startingIndex } = parsedArgs;
 const originFolder = path_1.default.relative(__dirname, `../${originFolderName}`);
 const targetFolderName = `${originFolderName}_renamed`;
 const targetFolder = path_1.default.relative(__dirname, `../${targetFolderName}`);
-const newPrefix = args[1];
-const customStartingIndex = parseInt(args[2], 10) || 0;
-if (!originFolderName || !newPrefix) {
-    throw new Error('❌ Missing args. Requires originFolderName and newPrefix');
-}
 console.log('originFolder 🤖', path_1.default.dirname(`${originFolder}/${originFolderName}`));
 console.log('targetFolder 🎯', path_1.default.dirname(`${targetFolder}/${targetFolderName}`));
 if (!fs_1.default.existsSync(originFolder)) {
@@ -34,9 +48,9 @@ files.forEach((file, index) => {
         originFolder,
         originalFile: file,
         targetFolder,
-        customStartingIndex,
+        startingIndex,
         index,
-        prefix: newPrefix,
+        prefix,
     });
 });
-console.log(`✅ Done! Renamed files in ${originFolderName} to the ${targetFolderName} with prefix ${newPrefix}`);
+console.log(`✅ Done! Renamed files in ${originFolderName} to the ${targetFolderName} with prefix ${prefix}`);
