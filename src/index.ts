@@ -1,7 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import yargs from 'yargs';
-import { renameToNewFile } from './utils';
+import {
+  getTargetFolder,
+  maybeCreateTargetFolder,
+  retrieveFiles,
+} from './utils';
+import { renameToNewFile } from './utils/rename';
 
 interface ExpectedArguments {
   origin: string;
@@ -43,52 +48,48 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
   )
   .parse(process.argv.slice(2));
 
-const { origin, prefix, target, startingIndex } = parsedArgs;
+const batchRename = (args: ExpectedArguments): void => {
+  const { origin, prefix, target, startingIndex } = args;
 
-const { name: originFolderName } = path.parse(origin);
+  const { name: originFolderName } = path.parse(origin);
 
-const originParent = path.dirname(origin);
+  const originParent = path.dirname(origin);
 
-// if not target path not provided,
-// use original name with `_renamed` appended
-const backupTargetFolderName = `${originFolderName}_renamed`;
-
-// use backup target folder if target not provided
-const targetFolder = target || `${originParent}/${backupTargetFolderName}`;
-
-console.log(`
-  🏁 Origin: ${origin}
-  🎯 Target: ${targetFolder}
-`);
-
-if (!fs.existsSync(origin)) {
-  throw new Error(`❌ Origin folder not found: ${originFolderName}`);
-}
-
-console.log('✅ Found folder:', originFolderName, '\n');
-
-if (!fs.existsSync(targetFolder)) {
-  fs.mkdirSync(targetFolder);
-  console.log('🛠 Created target folder', targetFolder);
-}
-
-const files: string[] = fs.readdirSync(origin);
-
-if (!files?.length) {
-  throw new Error(`❌ Failed to read origin folder at path: ${origin}`);
-}
-
-files.forEach((file: string, index: number): void => {
-  renameToNewFile({
-    origin,
-    originalFile: file,
-    targetFolder,
-    startingIndex,
-    index,
-    prefix,
+  const targetFolder = getTargetFolder({
+    target,
+    originFolderName,
+    originParent,
   });
-});
 
-console.log(`
-  🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
-`);
+  console.log(`
+    🏁 Origin: ${origin}
+    🎯 Target: ${targetFolder}
+  `);
+
+  if (!fs.existsSync(origin)) {
+    throw new Error(`❌ Origin folder not found: ${originFolderName}`);
+  }
+
+  console.log('✅ Found folder:', originFolderName, '\n');
+
+  maybeCreateTargetFolder(targetFolder);
+
+  const files = retrieveFiles(origin);
+
+  files.forEach((file: string, index: number): void => {
+    renameToNewFile({
+      origin,
+      originalFile: file,
+      targetFolder,
+      startingIndex,
+      index,
+      prefix,
+    });
+  });
+
+  console.log(`
+    🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
+  `);
+};
+
+batchRename(parsedArgs);

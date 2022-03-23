@@ -1,121 +1,89 @@
 import fs from 'fs';
-import {
-  padWithLeadingZeroes,
-  createFileNumber,
-  createTargetFileName,
-  renameToNewFile,
-} from '..';
-
-jest.mock('fs', () => {
-  const originalModule = jest.requireActual('fs');
-  return {
-    ...originalModule,
-    copyFileSync: jest
-      .fn()
-      .mockImplementation((origin: string, target: string) => ({
-        origin,
-        target,
-      })),
-  };
-});
-
-jest.mock('path', () => {
-  const originalModule = jest.requireActual('fs');
-  return {
-    ...originalModule,
-    extname: jest.fn(
-      (originalFile: string) => `.${originalFile.split('.')[1]}`
-    ),
-    basename: jest.fn((originalFile: string) => originalFile.split('.')[0]),
-  };
-});
+import { getTargetFolder, maybeCreateTargetFolder, retrieveFiles } from '..';
 
 describe('utils', () => {
-  describe('padWithLeadingZeroes', () => {
-    it('prepends 2 zeroes when fileIndex has 1 digit', () => {
-      const result = padWithLeadingZeroes(1);
-      expect(result).toBe('001');
-    });
-
-    it('prepends 1 zeroes when fileIndex has 2 digits', () => {
-      const result = padWithLeadingZeroes(10);
-      expect(result).toBe('010');
-    });
-
-    it('returns the fileIndex has >=3 digits', () => {
-      expect(padWithLeadingZeroes(100)).toBe('100');
-      expect(padWithLeadingZeroes(1000)).toBe('1000');
-    });
-  });
-
-  describe('createFileNumber', () => {
-    it('returns with right amount of leading zeroes if will result in file numbers that are <1000', () => {
-      expect(createFileNumber(3, 0)).toBe('003');
-      expect(createFileNumber(33, 5)).toBe('038');
-      expect(createFileNumber(333, 100)).toBe('433');
-    });
-
-    it('returns without leading zeroes if will result in file numbers that are >=1000', () => {
-      expect(createFileNumber(1000, 1)).toBe('1001');
-      expect(createFileNumber(1001, 99)).toBe('1100');
-      expect(createFileNumber(10000, 999)).toBe('10999');
-    });
-  });
-
-  describe('createTargetFileName', () => {
-    describe('returns the file name that the file should be renamed as', () => {
-      const prefix = 'prefix';
-      const extension = '.png';
-      const index = 2;
-
-      test('when there is a >0 custom starting index', () => {
-        const startingIndex = 23;
-
-        const result = createTargetFileName({
-          prefix,
-          extension,
-          startingIndex,
-          index,
-        });
-
-        expect(result).toBe('prefix-025.png');
+  describe('getTargetFolder', () => {
+    const originFolderName = 'original';
+    const originParent = 'base/path';
+    it('returns target folder specified by user if it was provided', () => {
+      const target = 'my/path/to/target';
+      const result = getTargetFolder({
+        target,
+        originFolderName,
+        originParent,
       });
 
-      test('when there is no custom starting index (is 0)', () => {
-        const startingIndex = 0;
+      expect(result).toBe(target);
+    });
 
-        const result = createTargetFileName({
-          prefix,
-          extension,
-          startingIndex,
-          index,
-        });
-
-        expect(result).toBe('prefix-001.png');
+    it('uses the original folder name with "_renamed" if target folder was not specified by user ', () => {
+      const result = getTargetFolder({
+        target: null,
+        originFolderName,
+        originParent,
       });
+
+      expect(result).toBe(`${originParent}/${originFolderName}_renamed`);
     });
   });
 
-  describe('renameToNewFile', () => {
-    it('copies the original file to a new folder with specified prefix', () => {
-      const args = {
-        originFolder: 'originFolder',
-        originalFile: 'original.js',
-        targetFolder: 'targetFolder',
-        numFiles: 10,
-        index: 0,
-        prefix: 'prefix',
-        startingIndex: 0,
-      };
+  describe('maybeCreateTargetFolder', () => {
+    let existsSyncSpy: jest.Mock;
+    let mkdirSyncSpy: jest.Mock;
+    beforeEach(() => {
+      existsSyncSpy = jest.spyOn(fs, 'existsSync') as jest.Mock;
+      mkdirSyncSpy = jest.spyOn(fs, 'mkdirSync') as jest.Mock;
+    });
 
-      const expectedCopyFileSyncArgs = [
-        'originFolder/original.js',
-        'targetFolder/prefix-001.js',
-      ];
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
 
-      renameToNewFile(args);
+    it('does not make the target folder if it already exists', () => {
+      existsSyncSpy.mockReturnValueOnce(true);
+      mkdirSyncSpy.mockImplementationOnce((folder: string) => folder);
 
-      expect(fs.copyFileSync).toHaveBeenCalledWith(...expectedCopyFileSyncArgs);
+      maybeCreateTargetFolder('/path/to/origin');
+
+      expect(mkdirSyncSpy).not.toHaveBeenCalled();
+    });
+
+    it('makes the target folder if it does not already exists', () => {
+      existsSyncSpy.mockReturnValueOnce(false);
+      mkdirSyncSpy.mockImplementationOnce((folder: string) => folder);
+
+      const targetFolder = '/path/to/origin';
+      maybeCreateTargetFolder(targetFolder);
+
+      expect(mkdirSyncSpy).toHaveBeenCalledWith(targetFolder);
+    });
+  });
+
+  describe('retrieveFiles', () => {
+    let readdirSyncSpy: jest.Mock;
+    beforeEach(() => {
+      readdirSyncSpy = jest.spyOn(fs, 'readdirSync') as jest.Mock;
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('returns the files from the origin folder if they exist', () => {
+      const mockFiles = ['/folder/1', '/folder/2', '/folder/3'];
+      readdirSyncSpy.mockReturnValueOnce(mockFiles);
+
+      const result = retrieveFiles('/some/origin');
+      expect(result).toEqual(mockFiles);
+    });
+
+    it("throws an error if files don't exist", () => {
+      const mockFiles: string[] = []; // empty
+      readdirSyncSpy.mockReturnValueOnce(mockFiles);
+
+      expect(() => {
+        retrieveFiles('/some/origin');
+      }).toThrow();
     });
   });
 });

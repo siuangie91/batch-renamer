@@ -3,52 +3,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.renameToNewFile = exports.createTargetFileName = exports.createFileNumber = exports.padWithLeadingZeroes = void 0;
+exports.retrieveFiles = exports.maybeCreateTargetFolder = exports.getTargetFolder = void 0;
 const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const FILE_NUMBER_MIN_DIGITS = 3;
-const padWithLeadingZeroes = (fileIndex) => {
-    const digits = fileIndex.toString().length;
-    const numLeadingZeros = FILE_NUMBER_MIN_DIGITS - digits;
-    if (numLeadingZeros < 1)
-        return fileIndex.toString();
-    let leadingZeros = '';
-    for (let i = 0; i < numLeadingZeros; i += 1) {
-        leadingZeros += '0';
+/**
+ * Creates the absolute path to the target folder.
+ * If no target was provided by the user,
+ * appends `_renamed` to the original folder name
+ * and uses that as the target folder name.
+ * @param props
+ * @returns
+ */
+const getTargetFolder = ({ target, originFolderName, originParent, }) => {
+    // if not target path not provided,
+    // use original name with `_renamed` appended
+    const backupTargetFolderName = `${originFolderName}_renamed`;
+    // use backup target folder if target not provided
+    const targetFolder = target || `${originParent}/${backupTargetFolderName}`;
+    return targetFolder;
+};
+exports.getTargetFolder = getTargetFolder;
+/**
+ * Creates the target folder if it doesn't already exist
+ * @param targetFolder absolute path to the target folder
+ */
+const maybeCreateTargetFolder = (targetFolder) => {
+    if (!fs_1.default.existsSync(targetFolder)) {
+        fs_1.default.mkdirSync(targetFolder);
+        console.log('🛠 Created target folder', targetFolder);
     }
-    return `${leadingZeros}${fileIndex}`;
 };
-exports.padWithLeadingZeroes = padWithLeadingZeroes;
-const createFileNumber = (startingIndex, index) => {
-    const fileIndex = startingIndex < 1 ? startingIndex + 1 : startingIndex + index;
-    const fileNumber = (0, exports.padWithLeadingZeroes)(fileIndex);
-    return fileNumber;
-};
-exports.createFileNumber = createFileNumber;
+exports.maybeCreateTargetFolder = maybeCreateTargetFolder;
 /**
- * Creates the file name to rename the file as
- * @param props
- * @returns new file name
+ * Retrieves the files inside the origin folder
+ * @param origin
+ * @returns files
  */
-const createTargetFileName = ({ prefix, extension, startingIndex, index, }) => {
-    const fileNumber = (0, exports.createFileNumber)(startingIndex, index);
-    return `${prefix}-${fileNumber}${extension}`;
+const retrieveFiles = (origin) => {
+    const files = fs_1.default.readdirSync(origin);
+    if (!files.length) {
+        throw new Error(`❌ There are no files inside ${origin}`);
+    }
+    return files;
 };
-exports.createTargetFileName = createTargetFileName;
-/**
- * Renames a given file
- * @param props
- */
-const renameToNewFile = ({ origin, originalFile, targetFolder, startingIndex, index, prefix, }) => {
-    const extension = path_1.default.extname(originalFile);
-    const basename = path_1.default.basename(originalFile, extension);
-    const targetFile = (0, exports.createTargetFileName)({
-        prefix,
-        extension,
-        startingIndex,
-        index,
-    });
-    fs_1.default.copyFileSync(`${origin}/${originalFile}`, `${targetFolder}/${targetFile}`);
-    console.log('🗂 ', basename, extension, '→ 🗳 ', targetFile);
-};
-exports.renameToNewFile = renameToNewFile;
+exports.retrieveFiles = retrieveFiles;
