@@ -43,52 +43,96 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
   )
   .parse(process.argv.slice(2));
 
-const { origin, prefix, target, startingIndex } = parsedArgs;
+/**
+ * Creates the absolute path to the target folder.
+ * If no target was provided by the user,
+ * appends `_renamed` to the original folder name
+ * and uses that as the target folder name.
+ * @param props
+ * @returns
+ */
+const getTargetFolder = ({
+  target,
+  originFolderName,
+  originParent,
+}: {
+  target: string | null;
+  originFolderName: string;
+  originParent: string;
+}): string => {
+  // if not target path not provided,
+  // use original name with `_renamed` appended
+  const backupTargetFolderName = `${originFolderName}_renamed`;
 
-const { name: originFolderName } = path.parse(origin);
+  // use backup target folder if target not provided
+  const targetFolder = target || `${originParent}/${backupTargetFolderName}`;
 
-const originParent = path.dirname(origin);
+  return targetFolder;
+};
 
-// if not target path not provided,
-// use original name with `_renamed` appended
-const backupTargetFolderName = `${originFolderName}_renamed`;
+/**
+ * Creates the target folder if it doesn't already exist
+ * @param targetFolder absolute path to the target folder
+ */
+const maybeCreateTargetFolder = (targetFolder: string): void => {
+  if (!fs.existsSync(targetFolder)) {
+    fs.mkdirSync(targetFolder);
+    console.log('🛠 Created target folder', targetFolder);
+  }
+};
 
-// use backup target folder if target not provided
-const targetFolder = target || `${originParent}/${backupTargetFolderName}`;
+const retrieveFiles = (origin: string): string[] => {
+  const files = fs.readdirSync(origin);
 
-console.log(`
-  🏁 Origin: ${origin}
-  🎯 Target: ${targetFolder}
-`);
+  if (!files.length) {
+    throw new Error(`❌ Failed to read origin folder at path: ${origin}`);
+  }
 
-if (!fs.existsSync(origin)) {
-  throw new Error(`❌ Origin folder not found: ${originFolderName}`);
-}
+  return files;
+};
 
-console.log('✅ Found folder:', originFolderName, '\n');
+const batchRename = (args: ExpectedArguments): void => {
+  const { origin, prefix, target, startingIndex } = args;
 
-if (!fs.existsSync(targetFolder)) {
-  fs.mkdirSync(targetFolder);
-  console.log('🛠 Created target folder', targetFolder);
-}
+  const { name: originFolderName } = path.parse(origin);
 
-const files: string[] = fs.readdirSync(origin);
+  const originParent = path.dirname(origin);
 
-if (!files?.length) {
-  throw new Error(`❌ Failed to read origin folder at path: ${origin}`);
-}
-
-files.forEach((file: string, index: number): void => {
-  renameToNewFile({
-    origin,
-    originalFile: file,
-    targetFolder,
-    startingIndex,
-    index,
-    prefix,
+  const targetFolder = getTargetFolder({
+    target,
+    originFolderName,
+    originParent,
   });
-});
 
-console.log(`
-  🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
-`);
+  console.log(`
+    🏁 Origin: ${origin}
+    🎯 Target: ${targetFolder}
+  `);
+
+  if (!fs.existsSync(origin)) {
+    throw new Error(`❌ Origin folder not found: ${originFolderName}`);
+  }
+
+  console.log('✅ Found folder:', originFolderName, '\n');
+
+  maybeCreateTargetFolder(targetFolder);
+
+  const files = retrieveFiles(origin);
+
+  files.forEach((file: string, index: number): void => {
+    renameToNewFile({
+      origin,
+      originalFile: file,
+      targetFolder,
+      startingIndex,
+      index,
+      prefix,
+    });
+  });
+
+  console.log(`
+    🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
+  `);
+};
+
+batchRename(parsedArgs);
