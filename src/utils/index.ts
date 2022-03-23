@@ -38,6 +38,10 @@ export const maybeCreateTargetFolder = (targetFolder: string): void => {
   }
 };
 
+/**
+ * Retrieves the files inside the origin folder
+ * @param origin
+ */
 export const retrieveFiles = (origin: string): string[] => {
   const files = fs.readdirSync(origin);
 

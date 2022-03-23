@@ -33,6 +33,10 @@ const maybeCreateTargetFolder = (targetFolder) => {
     }
 };
 exports.maybeCreateTargetFolder = maybeCreateTargetFolder;
+/**
+ * Retrieves the files inside the origin folder
+ * @param origin
+ */
 const retrieveFiles = (origin) => {
     const files = fs_1.default.readdirSync(origin);
     if (!files.length) {
