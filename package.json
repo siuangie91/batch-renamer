@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "espree": "^9.3.1",
-    "leading-zeroes": "^2.0.1",
     "nodemon": "^2.0.15"
   }
 }

@@ -2997,11 +2997,6 @@ latest-version@^5.1.0:
   dependencies:
     package-json "^6.3.0"
 
-leading-zeroes@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/leading-zeroes/-/leading-zeroes-2.0.1.tgz#344ff9c35931e874808aad95e08e837c514e8cb2"
-  integrity sha512-yOH+elUWV2nHfAFM5SuagINVhyWOuYl2jZu58mNkFd4/QPs68jVkXfDmoehYc5sL4RWUFN56NBltVXcdEfbqBQ==
-
 leven@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/leven/-/leven-3.1.0.tgz#77891de834064cccba82ae7842bb6b14a13ed7f2"

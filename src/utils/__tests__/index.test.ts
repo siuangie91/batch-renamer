@@ -1,5 +1,10 @@
 import fs from 'fs';
-import { createFileNumber, createTargetFileName, renameToNewFile } from '..';
+import {
+  padWithLeadingZeroes,
+  createFileNumber,
+  createTargetFileName,
+  renameToNewFile,
+} from '..';
 
 jest.mock('fs', () => {
   const originalModule = jest.requireActual('fs');
@@ -26,6 +31,23 @@ jest.mock('path', () => {
 });
 
 describe('utils', () => {
+  describe('padWithLeadingZeroes', () => {
+    it('prepends 2 zeroes when fileIndex has 1 digit', () => {
+      const result = padWithLeadingZeroes(1);
+      expect(result).toBe('001');
+    });
+
+    it('prepends 1 zeroes when fileIndex has 2 digits', () => {
+      const result = padWithLeadingZeroes(10);
+      expect(result).toBe('010');
+    });
+
+    it('returns the fileIndex has >=3 digits', () => {
+      expect(padWithLeadingZeroes(100)).toBe('100');
+      expect(padWithLeadingZeroes(1000)).toBe('1000');
+    });
+  });
+
   describe('createFileNumber', () => {
     it('returns with right amount of leading zeroes if will result in file numbers that are <1000', () => {
       expect(createFileNumber(3, 0)).toBe('003');

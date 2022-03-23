@@ -1,6 +1,22 @@
 import fs from 'fs';
 import path from 'path';
-import padWithLeadingZeroes from 'leading-zeroes';
+
+const FILE_NUMBER_MIN_DIGITS = 3;
+
+export const padWithLeadingZeroes = (fileIndex: number): string => {
+  const digits = fileIndex.toString().length;
+
+  const numLeadingZeros = FILE_NUMBER_MIN_DIGITS - digits;
+
+  if (numLeadingZeros < 1) return fileIndex.toString();
+
+  let leadingZeros = '';
+  for (let i = 0; i < numLeadingZeros; i += 1) {
+    leadingZeros += '0';
+  }
+
+  return `${leadingZeros}${fileIndex}`;
+};
 
 export const createFileNumber = (
   customStartingIndex: number,
@@ -11,7 +27,7 @@ export const createFileNumber = (
       ? customStartingIndex + 1
       : customStartingIndex + index;
 
-  const fileNumber = padWithLeadingZeroes(fileIndex, 3);
+  const fileNumber = padWithLeadingZeroes(fileIndex);
   return fileNumber;
 };
 
