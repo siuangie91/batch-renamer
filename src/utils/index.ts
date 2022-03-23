@@ -55,14 +55,14 @@ export const createTargetFileName = ({
  * @param props
  */
 export const renameToNewFile = ({
-  originFolder,
+  origin,
   originalFile,
   targetFolder,
   startingIndex,
   index,
   prefix,
 }: {
-  originFolder: string;
+  origin: string;
   originalFile: string;
   targetFolder: string;
   startingIndex: number;
@@ -71,7 +71,6 @@ export const renameToNewFile = ({
 }): void => {
   const extension = path.extname(originalFile);
   const basename = path.basename(originalFile, extension);
-  console.log('🗂 ', basename, extension);
 
   const targetFile = createTargetFileName({
     prefix,
@@ -80,10 +79,7 @@ export const renameToNewFile = ({
     index,
   });
 
-  fs.copyFileSync(
-    `${originFolder}/${originalFile}`,
-    `${targetFolder}/${targetFile}`
-  );
+  fs.copyFileSync(`${origin}/${originalFile}`, `${targetFolder}/${targetFile}`);
 
-  console.log('🗳 ', targetFile);
+  console.log('🗂 ', basename, extension, '→ 🗳 ', targetFile);
 };

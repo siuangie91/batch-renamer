@@ -4,13 +4,14 @@ import yargs from 'yargs';
 import { renameToNewFile } from './utils';
 
 interface ExpectedArguments {
-  originFolderName: string;
+  origin: string;
   prefix: string;
+  target: string | null;
   startingIndex: number;
 }
 
 const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
-  .option('originFolderName', {
+  .option('origin', {
     alias: 'o',
     type: 'string',
     describe: 'Absolute path to original folder of files to rename',
@@ -20,6 +21,12 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
     type: 'string',
     describe: 'Prefix for the renamed files',
   })
+  .option('target', {
+    alias: 't',
+    type: 'string',
+    describe: 'Absolute path tp folder to save renamed files to',
+    default: null,
+  })
   .option('startingIndex', {
     alias: 's',
     type: 'number',
@@ -27,45 +34,53 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
     default: 0,
   })
   .demandOption(
-    ['originFolderName', 'prefix'],
-    '❌ Missing args. Requires originFolderName and prefix'
+    ['origin', 'prefix'],
+    '❌ Missing args. Requires origin and prefix'
+  )
+  .help(
+    'help',
+    'Show help. See https://github.com/siuangie91/batch-renamer#batch-renamer'
   )
   .parse(process.argv.slice(2));
 
-const { originFolderName, prefix, startingIndex } = parsedArgs;
+const { origin, prefix, target, startingIndex } = parsedArgs;
 
-const originFolder = path.relative(__dirname, `../${originFolderName}`);
+const { name: originFolderName } = path.parse(origin);
 
-const targetFolderName = `${originFolderName}_renamed`;
-const targetFolder = path.relative(__dirname, `../${targetFolderName}`);
+const originParent = path.dirname(origin);
 
-console.log(
-  'originFolder 🤖',
-  path.dirname(`${originFolder}/${originFolderName}`)
-);
-console.log(
-  'targetFolder 🎯',
-  path.dirname(`${targetFolder}/${targetFolderName}`)
-);
+// if not target path not provided,
+// use original name with `_renamed` appended
+const backupTargetFolderName = `${originFolderName}_renamed`;
 
-if (!fs.existsSync(originFolder)) {
-  throw new Error(`❌ Origin folder not found: ${originFolder}`);
+// use backup target folder if target not provided
+const targetFolder = target || `${originParent}/${backupTargetFolderName}`;
+
+console.log(`
+  🏁 Origin: ${origin}
+  🎯 Target: ${targetFolder}
+`);
+
+if (!fs.existsSync(origin)) {
+  throw new Error(`❌ Origin folder not found: ${originFolderName}`);
 }
+
+console.log('✅ Found folder:', originFolderName, '\n');
 
 if (!fs.existsSync(targetFolder)) {
   fs.mkdirSync(targetFolder);
   console.log('🛠 Created target folder', targetFolder);
 }
 
-const files: string[] = fs.readdirSync(originFolder);
+const files: string[] = fs.readdirSync(origin);
 
 if (!files?.length) {
-  throw new Error(`❌ Failed to read origin folder at path: ${originFolder}`);
+  throw new Error(`❌ Failed to read origin folder at path: ${origin}`);
 }
 
 files.forEach((file: string, index: number): void => {
   renameToNewFile({
-    originFolder,
+    origin,
     originalFile: file,
     targetFolder,
     startingIndex,
@@ -74,6 +89,6 @@ files.forEach((file: string, index: number): void => {
   });
 });
 
-console.log(
-  `✅ Done! Renamed files in ${originFolderName} to the ${targetFolderName} with prefix ${prefix}`
-);
+console.log(`
+  🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
+`);
