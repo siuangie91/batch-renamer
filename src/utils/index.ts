@@ -3,6 +3,11 @@ import path from 'path';
 
 const FILE_NUMBER_MIN_DIGITS = 3;
 
+/**
+ * Pads the file index with appropriate number of leading zeroes
+ * @param fileIndex
+ * @returns file index with leading zeroes
+ */
 export const padWithLeadingZeroes = (fileIndex: number): string => {
   const digits = fileIndex.toString().length;
 
@@ -18,6 +23,12 @@ export const padWithLeadingZeroes = (fileIndex: number): string => {
   return `${leadingZeros}${fileIndex}`;
 };
 
+/**
+ * Creates the file number, taking the starting index into account
+ * @param startingIndex
+ * @param index
+ * @returns file index with leading zeros
+ */
 export const createFileNumber = (
   startingIndex: number,
   index: number

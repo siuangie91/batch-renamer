@@ -7,6 +7,11 @@ exports.renameToNewFile = exports.createTargetFileName = exports.createFileNumbe
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const FILE_NUMBER_MIN_DIGITS = 3;
+/**
+ * Pads the file index with appropriate number of leading zeroes
+ * @param fileIndex
+ * @returns file index with leading zeroes
+ */
 const padWithLeadingZeroes = (fileIndex) => {
     const digits = fileIndex.toString().length;
     const numLeadingZeros = FILE_NUMBER_MIN_DIGITS - digits;
@@ -19,6 +24,12 @@ const padWithLeadingZeroes = (fileIndex) => {
     return `${leadingZeros}${fileIndex}`;
 };
 exports.padWithLeadingZeroes = padWithLeadingZeroes;
+/**
+ * Creates the file number, taking the starting index into account
+ * @param startingIndex
+ * @param index
+ * @returns file index with leading zeros
+ */
 const createFileNumber = (startingIndex, index) => {
     const fileIndex = startingIndex < 1 ? startingIndex + 1 : startingIndex + index;
     const fileNumber = (0, exports.padWithLeadingZeroes)(fileIndex);

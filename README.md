@@ -57,7 +57,7 @@ Run `yarn batch-rename --help` to see arguments/options.
       <br />
       If not provided, file numbers will start at <code>001</code>.
       <br /><br />
-      ℹ️ <em>Note that file numbers will have at least 3 digits (leading zeroes are adding as necessary).</em>
+      ℹ️ <em>Note that file numbers will have at least 3 digits (leading zeroes are added as necessary).</em>
     </td>
     <td>13</td>
     <td>No</td>
