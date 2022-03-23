@@ -99,18 +99,17 @@ describe('utils', () => {
   describe('renameToNewFile', () => {
     it('copies the original file to a new folder with specified prefix', () => {
       const args = {
-        originFolder: 'originFolder',
+        origin: '/originFolder',
         originalFile: 'original.js',
-        targetFolder: 'targetFolder',
-        numFiles: 10,
+        targetFolder: '/targetFolder',
+        startingIndex: 0,
         index: 0,
         prefix: 'prefix',
-        startingIndex: 0,
       };
 
       const expectedCopyFileSyncArgs = [
-        'originFolder/original.js',
-        'targetFolder/prefix-001.js',
+        '/originFolder/original.js',
+        '/targetFolder/prefix-001.js',
       ];
 
       renameToNewFile(args);
