@@ -36,11 +36,12 @@ exports.maybeCreateTargetFolder = maybeCreateTargetFolder;
 /**
  * Retrieves the files inside the origin folder
  * @param origin
+ * @returns files
  */
 const retrieveFiles = (origin) => {
     const files = fs_1.default.readdirSync(origin);
     if (!files.length) {
-        throw new Error(`❌ Failed to read origin folder at path: ${origin}`);
+        throw new Error(`❌ There are no files inside ${origin}`);
     }
     return files;
 };
