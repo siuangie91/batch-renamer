@@ -1,6 +1,6 @@
 # Batch-renamer
 
-Simple node.js tool to batch rename files from one folder to another at the same level with a specified prefix.
+Simple node.js tool to batch rename files from one folder to another with a specified prefix.
 
 ## Usage
 
@@ -129,10 +129,10 @@ other # will contain renamed files
   |_Prefix-301.js
 ```
 
-Rename all of the files in `original` and store in the `other` folder:
+Rename all of the files in `original` with starting index of 302 and store in the `other` folder:
 
 ```bash
-yarn batch-rename -o original -p /Users/MyUser/Desktop/original -t /Users/MyUser/Desktop/other  -s 302
+yarn batch-rename -o /Users/MyUser/Desktop/original -p Prefix -t /Users/MyUser/Desktop/other -s 302
 ```
 
 Results in:
