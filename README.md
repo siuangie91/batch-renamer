@@ -35,7 +35,7 @@ Run `yarn batch-rename --help` to see arguments/options.
     <td>Yes</td>
   </tr>
   <tr>
-    <td><code>-p</code>, <code>--origin</code></td>
+    <td><code>-p</code>, <code>--prefix</code></td>
     <td>Prefix for the renamed files</td>
     <td>new-name</td>
     <td>Yes</td>
