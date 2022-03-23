@@ -18,6 +18,12 @@ const parsedArgs = (0, yargs_1.default)(process.argv.slice(2))
     type: 'string',
     describe: 'Prefix for the renamed files',
 })
+    .option('target', {
+    alias: 't',
+    type: 'string',
+    describe: 'Absolute path tp folder to save renamed files to',
+    default: null,
+})
     .option('startingIndex', {
     alias: 's',
     type: 'number',
@@ -27,11 +33,14 @@ const parsedArgs = (0, yargs_1.default)(process.argv.slice(2))
     .demandOption(['origin', 'prefix'], '❌ Missing args. Requires origin and prefix')
     .help('help', 'Show help. See https://github.com/siuangie91/batch-renamer#batch-renamer')
     .parse(process.argv.slice(2));
-const { origin, prefix, startingIndex } = parsedArgs;
+const { origin, prefix, target, startingIndex } = parsedArgs;
 const { name: originFolderName } = path_1.default.parse(origin);
 const originParent = path_1.default.dirname(origin);
-const targetFolderName = `${originFolderName}_renamed`;
-const targetFolder = `${originParent}/${targetFolderName}`;
+// if not target path not provided,
+// use original name with `_renamed` appended
+const backupTargetFolderName = `${originFolderName}_renamed`;
+// use backup target folder if target not provided
+const targetFolder = target || `${originParent}/${backupTargetFolderName}`;
 console.log(`
   🏁 Origin: ${origin}
   🎯 Target: ${targetFolder}
@@ -59,5 +68,5 @@ files.forEach((file, index) => {
     });
 });
 console.log(`
-  🎉 Done! Renamed files in ${originFolderName} to the ${targetFolderName} with prefix ${prefix}
+  🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
 `);

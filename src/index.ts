@@ -6,6 +6,7 @@ import { renameToNewFile } from './utils';
 interface ExpectedArguments {
   origin: string;
   prefix: string;
+  target: string | null;
   startingIndex: number;
 }
 
@@ -19,6 +20,12 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
     alias: 'p',
     type: 'string',
     describe: 'Prefix for the renamed files',
+  })
+  .option('target', {
+    alias: 't',
+    type: 'string',
+    describe: 'Absolute path tp folder to save renamed files to',
+    default: null,
   })
   .option('startingIndex', {
     alias: 's',
@@ -36,14 +43,18 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
   )
   .parse(process.argv.slice(2));
 
-const { origin, prefix, startingIndex } = parsedArgs;
+const { origin, prefix, target, startingIndex } = parsedArgs;
 
 const { name: originFolderName } = path.parse(origin);
 
 const originParent = path.dirname(origin);
 
-const targetFolderName = `${originFolderName}_renamed`;
-const targetFolder = `${originParent}/${targetFolderName}`;
+// if not target path not provided,
+// use original name with `_renamed` appended
+const backupTargetFolderName = `${originFolderName}_renamed`;
+
+// use backup target folder if target not provided
+const targetFolder = target || `${originParent}/${backupTargetFolderName}`;
 
 console.log(`
   🏁 Origin: ${origin}
@@ -79,5 +90,5 @@ files.forEach((file: string, index: number): void => {
 });
 
 console.log(`
-  🎉 Done! Renamed files in ${originFolderName} to the ${targetFolderName} with prefix ${prefix}
+  🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
 `);
