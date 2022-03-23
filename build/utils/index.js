@@ -39,17 +39,16 @@ exports.createTargetFileName = createTargetFileName;
  * Renames a given file
  * @param props
  */
-const renameToNewFile = ({ originFolder, originalFile, targetFolder, startingIndex, index, prefix, }) => {
+const renameToNewFile = ({ origin, originalFile, targetFolder, startingIndex, index, prefix, }) => {
     const extension = path_1.default.extname(originalFile);
     const basename = path_1.default.basename(originalFile, extension);
-    console.log('🗂 ', basename, extension);
     const targetFile = (0, exports.createTargetFileName)({
         prefix,
         extension,
         startingIndex,
         index,
     });
-    fs_1.default.copyFileSync(`${originFolder}/${originalFile}`, `${targetFolder}/${targetFile}`);
-    console.log('🗳 ', targetFile);
+    fs_1.default.copyFileSync(`${origin}/${originalFile}`, `${targetFolder}/${targetFile}`);
+    console.log('🗂 ', basename, extension, '→ 🗳 ', targetFile);
 };
 exports.renameToNewFile = renameToNewFile;
