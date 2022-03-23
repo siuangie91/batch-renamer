@@ -23,25 +23,29 @@ Run `yarn batch-rename --help` to see arguments/options.
   <thead>
     <tr>
       <th>Argument</th>
+      <th>Alias</th>
       <th>Description</th>
       <th>Example</th>
       <th>Required?</th>
     </tr>
   </thead>
   <tr>
-    <td><code>-o</code>, <code>--origin</code></td>
+    <td><code>--origin</code></td>
+    <td><code>-o</code></td>
     <td>Absolute path to original folder of files to rename</td>
     <td>/Users/userName/Desktop/originalFolder</td>
     <td>Yes</td>
   </tr>
   <tr>
-    <td><code>-p</code>, <code>--prefix</code></td>
+    <td><code>--prefix</code></td>
+    <td><code>-p</code></td>
     <td>Prefix for the renamed files</td>
     <td>new-name</td>
     <td>Yes</td>
   </tr>
   <tr>
-    <td><code>-t</code>, <code>--target</code></td>
+    <td><code>--target</code></td>
+    <td><code>-t</code></td>
     <td>
       Absolute path to folder to save renamed files to. Creates the folder if it doesn't already exist.
       <br /><br />
@@ -51,7 +55,8 @@ Run `yarn batch-rename --help` to see arguments/options.
     <td>No</td>
   </tr>
   <tr>
-    <td><code>-s</code>, <code>--startingIndex</code></td>
+    <td><code>--startingIndex</code></td>
+    <td><code>-s</code></td>
     <td>
       Custom starting index for renamed files.
       <br />
