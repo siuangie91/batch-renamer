@@ -41,6 +41,16 @@ Run `yarn batch-rename --help` to see arguments/options.
     <td>Yes</td>
   </tr>
   <tr>
+    <td><code>-t</code>, <code>--target</code></td>
+    <td>
+      Absolute path to folder to save renamed files to. Creates the folder if it doesn't already exist.
+      <br /><br />
+      ℹ️ <em>If not provided, a new folder called <code>{originalFolder}_renamed</code> will be created.</em>
+    </td>
+    <td>/Users/userName/Desktop/renameToHere</td>
+    <td>No</td>
+  </tr>
+  <tr>
     <td><code>-s</code>, <code>--startingIndex</code></td>
     <td>
       Custom starting index for renamed files.
@@ -69,7 +79,7 @@ original
 whose absolute path is `/Users/MyUser/Desktop/original`, rename all the files in there with prefix of `Renamed`:
 
 ```bash
-yarn batch-rename -o original -p Renamed
+yarn batch-rename -o /Users/MyUser/Desktop/original -p Renamed
 ```
 
 Results in:
@@ -81,7 +91,7 @@ original # origin folder
 
 original_renamed # new folder, created if not already existing
   |_Renamed-001.jpg
-  |_Renamed-002.jpg
+  |_Renamed-002.png
 ```
 
 #### With starting index
@@ -101,7 +111,41 @@ original # origin folder
 
 original_renamed # new folder, created if not already existing
   |_Renamed-300.jpg
-  |_Renamed-301.jpg
+  |_Renamed-301.png
+```
+
+Useful when used with [`--target`](#with-specified-target-folder).
+
+#### With specified target folder
+
+Given this folder structure on your desktop:
+
+```bash
+original # contains file to rename
+  |_file.jpg
+  |_image.png
+
+other # will contain renamed files
+  |_Prefix-301.js
+```
+
+Rename all of the files in `original` and store in the `other` folder:
+
+```bash
+yarn batch-rename -o original -p /Users/MyUser/Desktop/original -t /Users/MyUser/Desktop/other  -s 302
+```
+
+Results in:
+
+```bash
+original # origin folder
+  |_file.jpg
+  |_image.png
+
+other # now also contains renamed files from original
+  |_Prefix-301.js
+  |_Prefix-302.jpg
+  |_Prefix-303.png
 ```
 
 This is useful for when you already have files in the target folder with the given prefix.
