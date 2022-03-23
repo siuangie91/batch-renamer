@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import yargs from 'yargs';
-import { renameToNewFile } from './utils';
+import { renameToNewFile } from './utils/rename';
 
 interface ExpectedArguments {
   origin: string;

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const yargs_1 = __importDefault(require("yargs"));
-const utils_1 = require("./utils");
+const rename_1 = require("./utils/rename");
 const parsedArgs = (0, yargs_1.default)(process.argv.slice(2))
     .option('origin', {
     alias: 'o',
@@ -86,7 +86,7 @@ const batchRename = (args) => {
     maybeCreateTargetFolder(targetFolder);
     const files = retrieveFiles(origin);
     files.forEach((file, index) => {
-        (0, utils_1.renameToNewFile)({
+        (0, rename_1.renameToNewFile)({
             origin,
             originalFile: file,
             targetFolder,

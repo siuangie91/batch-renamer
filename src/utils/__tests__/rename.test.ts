@@ -4,7 +4,7 @@ import {
   createFileNumber,
   createTargetFileName,
   renameToNewFile,
-} from '..';
+} from '../rename';
 
 jest.mock('fs', () => {
   const originalModule = jest.requireActual('fs');
