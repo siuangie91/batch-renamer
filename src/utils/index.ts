@@ -33,11 +33,12 @@ export const createFileNumber = (
   startingIndex: number,
   index: number
 ): string => {
-  const fileIndex =
-    startingIndex < 1 ? startingIndex + 1 : startingIndex + index;
+  // if no starting index provided, start number at 1 (instead of 0)
+  const incrementer = startingIndex ? 0 : 1;
 
-  const fileNumber = padWithLeadingZeroes(fileIndex);
-  return fileNumber;
+  const fileIndex = startingIndex + index + incrementer;
+
+  return padWithLeadingZeroes(fileIndex);
 };
 
 /**

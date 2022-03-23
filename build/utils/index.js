@@ -31,9 +31,10 @@ exports.padWithLeadingZeroes = padWithLeadingZeroes;
  * @returns file index with leading zeros
  */
 const createFileNumber = (startingIndex, index) => {
-    const fileIndex = startingIndex < 1 ? startingIndex + 1 : startingIndex + index;
-    const fileNumber = (0, exports.padWithLeadingZeroes)(fileIndex);
-    return fileNumber;
+    // if no starting index provided, start number at 1 (instead of 0)
+    const incrementer = startingIndex ? 0 : 1;
+    const fileIndex = startingIndex + index + incrementer;
+    return (0, exports.padWithLeadingZeroes)(fileIndex);
 };
 exports.createFileNumber = createFileNumber;
 /**

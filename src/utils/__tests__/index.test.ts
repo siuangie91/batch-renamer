@@ -66,10 +66,10 @@ describe('utils', () => {
     describe('returns the file name that the file should be renamed as', () => {
       const prefix = 'prefix';
       const extension = '.png';
-      const index = 2;
 
       test('when there is a >0 custom starting index', () => {
         const startingIndex = 23;
+        const index = 2;
 
         const result = createTargetFileName({
           prefix,
@@ -83,6 +83,7 @@ describe('utils', () => {
 
       test('when there is no custom starting index (is 0)', () => {
         const startingIndex = 0;
+        const index = 2;
 
         const result = createTargetFileName({
           prefix,
@@ -91,7 +92,7 @@ describe('utils', () => {
           index,
         });
 
-        expect(result).toBe('prefix-001.png');
+        expect(result).toBe('prefix-003.png');
       });
     });
   });
