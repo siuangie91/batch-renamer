@@ -33,14 +33,14 @@ Run `yarn batch-rename --help` to see arguments/options.
     <td><code>--origin</code></td>
     <td><code>-o</code></td>
     <td>Absolute path to original folder of files to rename</td>
-    <td>/Users/userName/Desktop/originalFolder</td>
+    <td><code>/Users/userName/Desktop/originalFolder</code></td>
     <td>Yes</td>
   </tr>
   <tr>
     <td><code>--prefix</code></td>
     <td><code>-p</code></td>
     <td>Prefix for the renamed files</td>
-    <td>new-name</td>
+    <td><code>new-name</code></td>
     <td>Yes</td>
   </tr>
   <tr>
@@ -51,7 +51,7 @@ Run `yarn batch-rename --help` to see arguments/options.
       <br /><br />
       ℹ️ <em>If not provided, a new folder called <code>{originalFolder}_renamed</code> will be created.</em>
     </td>
-    <td>/Users/userName/Desktop/renameToHere</td>
+    <td><code>/Users/userName/Desktop/renameToHere</code></td>
     <td>No</td>
   </tr>
   <tr>
@@ -64,7 +64,7 @@ Run `yarn batch-rename --help` to see arguments/options.
       <br /><br />
       ℹ️ <em>Note that file numbers will have at least 3 digits (leading zeroes are added as necessary).</em>
     </td>
-    <td>13</td>
+    <td><code>13</code></td>
     <td>No</td>
   </tr>
 </table>
@@ -123,6 +123,8 @@ Useful when used with [`--target`](#with-specified-target-folder).
 
 ### With specified target folder
 
+#### Target folder already exists
+
 Given this folder structure on your desktop:
 
 ```bash
@@ -134,7 +136,7 @@ other # will contain renamed files
   |_Prefix-301.js
 ```
 
-Rename all of the files in `original` with starting index of 302 and store in the `other` folder:
+Rename all of the files in `original` with starting index of 302, prefix of `Prefix` and store in the `other` folder:
 
 ```bash
 yarn batch-rename -o /Users/MyUser/Desktop/original -p Prefix -t /Users/MyUser/Desktop/other -s 302
@@ -154,3 +156,34 @@ other # now also contains renamed files from original
 ```
 
 This is useful for when you already have files in the target folder with the given prefix.
+
+#### Target folder does not yet exist
+
+Given this folder on your desktop:
+
+```bash
+original # contains file to rename
+  |_file.jpg
+  |_image.png
+```
+
+Rename all of the files in `original` and store in a new `copy` folder in the `/Users/MyUser/Desktop/subfolder/` directory with a prefix of `Copied`:
+
+```bash
+yarn batch-rename -o /Users/MyUser/Desktop/subfolder/original -p Copied -t /Users/MyUser/Desktop/copy
+```
+
+Results in:
+
+```bash
+Desktop
+  |_original # origin folder
+    |_file.jpg
+    |_image.png
+  |_subfolder
+    |_copy # created new folder that did not exist before
+      |_Copied-001.js
+      |_Copied-002.jpg
+```
+
+This is useful for when you know exactly where you want the target folder to go.
