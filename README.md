@@ -170,7 +170,7 @@ original # contains file to rename
 Rename all of the files in `original` and store in a new `copy` folder in the `/Users/MyUser/Desktop/subfolder/` directory with a prefix of `Copied`:
 
 ```bash
-yarn batch-rename -o /Users/MyUser/Desktop/subfolder/original -p Copied -t /Users/MyUser/Desktop/copy
+yarn batch-rename -o /Users/MyUser/Desktop/original -p Copied -t /Users/MyUser/Desktop/subfolder/copy
 ```
 
 Results in:
