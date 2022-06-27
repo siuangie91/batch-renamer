@@ -20,7 +20,7 @@ jest.mock('fs', () => {
 });
 
 jest.mock('path', () => {
-  const originalModule = jest.requireActual('fs');
+  const originalModule = jest.requireActual('path');
   return {
     ...originalModule,
     extname: jest.fn(
