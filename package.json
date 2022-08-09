@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Angie Siu",
   "license": "MIT",
+  "engines": {
+    "node": "16.14.2"
+  },
   "scripts": {
     "dev": "tsc -w",
     "batch-rename": "node build/",
