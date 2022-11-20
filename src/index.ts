@@ -29,7 +29,7 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
   .option('target', {
     alias: 't',
     type: 'string',
-    describe: 'Absolute path tp folder to save renamed files to',
+    describe: 'Absolute path to folder to save renamed files to',
     default: null,
   })
   .option('startingIndex', {
