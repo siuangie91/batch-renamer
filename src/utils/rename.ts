@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import type { TargetFileName, NewFileRenameInput } from 'src/types';
 
 const FILE_NUMBER_MIN_DIGITS = 3;
 
@@ -43,7 +44,7 @@ export const createFileNumber = (
 
 /**
  * Creates the file name to rename the file as
- * @param props
+ * @param targetFileName
  * @returns new file name
  */
 export const createTargetFileName = ({
@@ -51,12 +52,7 @@ export const createTargetFileName = ({
   extension,
   startingIndex,
   index,
-}: {
-  prefix: string;
-  extension: string;
-  startingIndex: number;
-  index: number;
-}): string => {
+}: TargetFileName): string => {
   const fileNumber = createFileNumber(startingIndex, index);
 
   return `${prefix}-${fileNumber}${extension}`;
@@ -73,14 +69,7 @@ export const renameToNewFile = ({
   startingIndex,
   index,
   prefix,
-}: {
-  origin: string;
-  originalFile: string;
-  targetFolder: string;
-  startingIndex: number;
-  index: number;
-  prefix: string;
-}): void => {
+}: NewFileRenameInput): void => {
   const extension = path.extname(originalFile);
   const basename = path.basename(originalFile, extension);
 

@@ -1,19 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import yargs from 'yargs';
+import type { ExpectedArguments } from 'src/types';
 import {
   getTargetFolder,
   maybeCreateTargetFolder,
   retrieveFiles,
 } from './utils';
 import { renameToNewFile } from './utils/rename';
-
-interface ExpectedArguments {
-  origin: string;
-  prefix: string;
-  target: string | null;
-  startingIndex: number;
-}
 
 const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
   .option('origin', {
