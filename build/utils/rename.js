@@ -39,7 +39,7 @@ const createFileNumber = (startingIndex, index) => {
 exports.createFileNumber = createFileNumber;
 /**
  * Creates the file name to rename the file as
- * @param props
+ * @param targetFileName
  * @returns new file name
  */
 const createTargetFileName = ({ prefix, extension, startingIndex, index, }) => {

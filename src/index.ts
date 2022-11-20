@@ -1,19 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import yargs from 'yargs';
+import type { ExpectedArguments } from 'src/types';
 import {
   getTargetFolder,
   maybeCreateTargetFolder,
   retrieveFiles,
 } from './utils';
 import { renameToNewFile } from './utils/rename';
-
-interface ExpectedArguments {
-  origin: string;
-  prefix: string;
-  target: string | null;
-  startingIndex: number;
-}
 
 const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
   .option('origin', {
@@ -29,7 +23,7 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
   .option('target', {
     alias: 't',
     type: 'string',
-    describe: 'Absolute path tp folder to save renamed files to',
+    describe: 'Absolute path to folder to save renamed files to',
     default: null,
   })
   .option('startingIndex', {

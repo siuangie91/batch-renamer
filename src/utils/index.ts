@@ -1,4 +1,5 @@
 import fs from 'fs';
+import type { TargetFolder } from 'src/types';
 
 /**
  * Creates the absolute path to the target folder.
@@ -12,11 +13,7 @@ export const getTargetFolder = ({
   target,
   originFolderName,
   originParent,
-}: {
-  target: string | null;
-  originFolderName: string;
-  originParent: string;
-}): string => {
+}: TargetFolder): string => {
   // if not target path not provided,
   // use original name with `_renamed` appended
   const backupTargetFolderName = `${originFolderName}_renamed`;

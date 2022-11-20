@@ -22,7 +22,7 @@ const parsedArgs = (0, yargs_1.default)(process.argv.slice(2))
     .option('target', {
     alias: 't',
     type: 'string',
-    describe: 'Absolute path tp folder to save renamed files to',
+    describe: 'Absolute path to folder to save renamed files to',
     default: null,
 })
     .option('startingIndex', {
