@@ -11,7 +11,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  check:
+  ts_check:
 
     runs-on: ubuntu-latest
 
