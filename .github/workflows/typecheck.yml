@@ -28,4 +28,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: yarn
-    - run: tsc --noEmit --verbose
+    - run: tsc --noEmit --pretty
