@@ -7,7 +7,7 @@ Simple node.js tool to batch rename files from one folder to another with a spec
 1. Clone this repo.
 1. Install the app.
    ```bash
-   cd 'path/to/batch-renamer'
+   cd path/to/batch-renamer
    nvm use && yarn
    ```
 1. Run the app with the arguments:
@@ -81,10 +81,10 @@ original
   |_image.png
 ```
 
-whose absolute path is `/Users/MyUser/Desktop/original`, rename all the files in there with prefix of `Renamed`:
+whose absolute path is `~/Desktop/original`, rename all the files in there with prefix of `Renamed`:
 
 ```bash
-yarn batch-rename -o /Users/MyUser/Desktop/original -p Renamed
+yarn batch-rename -o ~/Desktop/original -p Renamed
 ```
 
 Results in:
@@ -104,7 +104,7 @@ original_renamed # new folder, created if not already existing
 Using that same [folder](#without-starting-index), rename all of the files with starting index of 300:
 
 ```bash
-yarn batch-rename -o original -p Renamed -s 300
+yarn batch-rename -o ~/Desktop/original -p Renamed -s 300
 ```
 
 Results in:
@@ -139,7 +139,7 @@ other # will contain renamed files
 Rename all of the files in `original` with starting index of 302, prefix of `Prefix` and store in the `other` folder:
 
 ```bash
-yarn batch-rename -o /Users/MyUser/Desktop/original -p Prefix -t /Users/MyUser/Desktop/other -s 302
+yarn batch-rename -o ~/Desktop/original -p Prefix -t ~/Desktop/other -s 302
 ```
 
 Results in:
@@ -167,10 +167,10 @@ original # contains file to rename
   |_image.png
 ```
 
-Rename all of the files in `original` and store in a new `copy` folder in the `/Users/MyUser/Desktop/subfolder/` directory with a prefix of `Copied`:
+Rename all of the files in `original` and store in a new `copy` folder in the `~/Desktop/subfolder/` directory with a prefix of `Copied`:
 
 ```bash
-yarn batch-rename -o /Users/MyUser/Desktop/original -p Copied -t /Users/MyUser/Desktop/subfolder/copy
+yarn batch-rename -o ~/Desktop/original -p Copied -t ~/Desktop/subfolder/copy
 ```
 
 Results in:
