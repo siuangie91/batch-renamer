@@ -1,24 +1,24 @@
-export interface ExpectedArguments {
+export type ExpectedArguments = {
   origin: string;
   prefix: string;
   target: string | null;
   startingIndex: number;
 }
 
-export interface TargetFolder {
+export type TargetFolder = {
   target: string | null;
   originFolderName: string;
   originParent: string;
 }
 
-export interface TargetFileName {
+export type TargetFileName = {
   prefix: string;
   extension: string;
   startingIndex: number;
   index: number;
 }
 
-export interface NewFileRenameInput {
+export type NewFileRenameInput = {
   origin: string;
   originalFile: string;
   targetFolder: string;
