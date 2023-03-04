@@ -6,10 +6,8 @@ import type { TargetFolder } from 'src/types';
  * If no target was provided by the user,
  * appends `_renamed` to the original folder name
  * and uses that as the target folder name.
- * @param props
- * @returns
  */
-export const getTargetFolder = ({
+export const getTargetFolderName = ({
   target,
   originFolderName,
   originParent,

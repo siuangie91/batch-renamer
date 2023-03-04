@@ -1,13 +1,13 @@
 import fs from 'fs';
-import { getTargetFolder, maybeCreateTargetFolder } from '../target';
+import { getTargetFolderName, maybeCreateTargetFolder } from '../target';
 
 describe('utils > target', () => {
-  describe('getTargetFolder', () => {
+  describe('getTargetFolderName', () => {
     const originFolderName = 'original';
     const originParent = 'base/path';
     it('returns target folder specified by user if it was provided', () => {
       const target = 'my/path/to/target';
-      const result = getTargetFolder({
+      const result = getTargetFolderName({
         target,
         originFolderName,
         originParent,
@@ -17,7 +17,7 @@ describe('utils > target', () => {
     });
 
     it('uses the original folder name with "_renamed" if target folder was not specified by user ', () => {
-      const result = getTargetFolder({
+      const result = getTargetFolderName({
         target: null,
         originFolderName,
         originParent,
@@ -30,6 +30,7 @@ describe('utils > target', () => {
   describe('maybeCreateTargetFolder', () => {
     let existsSyncSpy: jest.Mock;
     let mkdirSyncSpy: jest.Mock;
+    
     beforeEach(() => {
       existsSyncSpy = jest.spyOn(fs, 'existsSync') as jest.Mock;
       mkdirSyncSpy = jest.spyOn(fs, 'mkdirSync') as jest.Mock;

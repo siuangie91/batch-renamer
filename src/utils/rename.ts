@@ -59,7 +59,7 @@ export const createTargetFileName = ({
 export const renameToNewFile = ({
   origin,
   originalFileName,
-  targetFolder,
+  targetFolderName,
   startingIndex,
   index,
   prefix,
@@ -74,7 +74,7 @@ export const renameToNewFile = ({
     index,
   });
 
-  fs.copyFileSync(`${origin}/${originalFileName}`, `${targetFolder}/${targetFile}`);
+  fs.copyFileSync(`${origin}/${originalFileName}`, `${targetFolderName}/${targetFile}`);
 
   console.log('🗂 ', basename, extension, '→ 🗳 ', targetFile);
 };

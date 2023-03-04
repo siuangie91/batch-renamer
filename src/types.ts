@@ -1,28 +1,31 @@
-export type CommandArguments = {
-  origin: string;
+type TargetFileNameBaseParams = {
   prefix: string;
   startingIndex: number;
-  target: string | null;
+}
+
+type TargetPath = string | null;
+
+export type CommandArguments = TargetFileNameBaseParams & {
+  origin: string;
+  target: TargetPath;
 }
 
 export type TargetFolder = {
   originFolderName: string;
   originParent: string;
-  target: string | null;
+  target: TargetPath;
 }
 
-export type TargetFile = {
+type TargetFileName = TargetFileNameBaseParams & {
+  index: number; 
+}
+
+export type TargetFile = TargetFileName & {
   extension: string;
-  index: number;
-  prefix: string;
-  startingIndex: number;
 }
 
-export type NewFileRenameProps = {
-  index: number;
+export type NewFileRenameProps = TargetFileName & {
   origin: string;
   originalFileName: string;
-  prefix: string;
-  startingIndex: number;
-  targetFolder: string;
+  targetFolderName: string;
 }

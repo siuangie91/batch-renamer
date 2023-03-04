@@ -4,6 +4,7 @@ import { retrieveFiles } from '../origin';
 describe('utils > origin', () => {
   describe('retrieveFiles', () => {
     let readdirSyncSpy: jest.Mock;
+    
     beforeEach(() => {
       readdirSyncSpy = jest.spyOn(fs, 'readdirSync') as jest.Mock;
     });

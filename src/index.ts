@@ -3,7 +3,7 @@ import path from 'path';
 import yargs from 'yargs';
 import type { CommandArguments } from 'src/types';
 import {
-  getTargetFolder,
+  getTargetFolderName,
   maybeCreateTargetFolder,
 } from './utils/target';
 import { retrieveFiles } from './utils/origin';
@@ -49,7 +49,7 @@ const batchRename = (args: CommandArguments): void => {
 
   const originParent = path.dirname(origin);
 
-  const targetFolder = getTargetFolder({
+  const targetFolderName = getTargetFolderName({
     target,
     originFolderName,
     originParent,
@@ -57,7 +57,7 @@ const batchRename = (args: CommandArguments): void => {
 
   console.log(`
     🏁 Origin: ${origin}
-    🎯 Target: ${targetFolder}
+    🎯 Target: ${targetFolderName}
   `);
 
   if (!fs.existsSync(origin)) {
@@ -66,7 +66,7 @@ const batchRename = (args: CommandArguments): void => {
 
   console.log('✅ Found folder:', originFolderName, '\n');
 
-  maybeCreateTargetFolder(targetFolder);
+  maybeCreateTargetFolder(targetFolderName);
 
   const files = retrieveFiles(origin);
 
@@ -74,7 +74,7 @@ const batchRename = (args: CommandArguments): void => {
     renameToNewFile({
       origin,
       originalFileName: file,
-      targetFolder,
+      targetFolderName,
       startingIndex,
       index,
       prefix,
@@ -82,7 +82,7 @@ const batchRename = (args: CommandArguments): void => {
   });
 
   console.log(`
-    🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
+    🎉 Done! Renamed files in ${originFolderName} to ${targetFolderName} with prefix ${prefix}
   `);
 };
 
