@@ -1,4 +1,5 @@
 import fs from 'fs';
+
 /**
  * Retrieves the files inside the origin folder
  * @param origin
