@@ -55,6 +55,6 @@ const renameToNewFile = ({ origin, originalFileName, targetFolderName, startingI
         index,
     });
     fs_1.default.copyFileSync(`${origin}/${originalFileName}`, `${targetFolderName}/${targetFile}`);
-    console.log('🗂 ', basename, extension, '→ 🗳 ', targetFile);
+    console.log('🗂 ', `${basename}${extension}`, '→ 🗳 ', targetFile);
 };
 exports.renameToNewFile = renameToNewFile;
