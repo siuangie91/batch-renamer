@@ -5,8 +5,8 @@ import type { CommandArguments } from 'src/types';
 import {
   getTargetFolder,
   maybeCreateTargetFolder,
-  retrieveFiles,
-} from './utils';
+} from './utils/target';
+import { retrieveFiles } from './utils/origin';
 import { renameToNewFile } from './utils/rename';
 
 const parsedArgs: CommandArguments = yargs(process.argv.slice(2))
@@ -73,7 +73,7 @@ const batchRename = (args: CommandArguments): void => {
   files.forEach((file: string, index: number): void => {
     renameToNewFile({
       origin,
-      originalFile: file,
+      originalFileName: file,
       targetFolder,
       startingIndex,
       index,
