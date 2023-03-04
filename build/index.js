@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const yargs_1 = __importDefault(require("yargs"));
-const utils_1 = require("./utils");
+const target_1 = require("./utils/target");
+const origin_1 = require("./utils/origin");
 const rename_1 = require("./utils/rename");
 const parsedArgs = (0, yargs_1.default)(process.argv.slice(2))
     .option('origin', {
@@ -38,33 +39,33 @@ const batchRename = (args) => {
     const { origin, prefix, target, startingIndex } = args;
     const { name: originFolderName } = path_1.default.parse(origin);
     const originParent = path_1.default.dirname(origin);
-    const targetFolder = (0, utils_1.getTargetFolder)({
+    const targetFolderName = (0, target_1.getTargetFolderName)({
         target,
         originFolderName,
         originParent,
     });
     console.log(`
     🏁 Origin: ${origin}
-    🎯 Target: ${targetFolder}
+    🎯 Target: ${targetFolderName}
   `);
     if (!fs_1.default.existsSync(origin)) {
         throw new Error(`❌ Origin folder not found: ${originFolderName}`);
     }
     console.log('✅ Found folder:', originFolderName, '\n');
-    (0, utils_1.maybeCreateTargetFolder)(targetFolder);
-    const files = (0, utils_1.retrieveFiles)(origin);
+    (0, target_1.maybeCreateTargetFolder)(targetFolderName);
+    const files = (0, origin_1.retrieveFiles)(origin);
     files.forEach((file, index) => {
         (0, rename_1.renameToNewFile)({
             origin,
-            originalFile: file,
-            targetFolder,
+            originalFileName: file,
+            targetFolderName,
             startingIndex,
             index,
             prefix,
         });
     });
     console.log(`
-    🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
+    🎉 Done! Renamed files in ${originFolderName} to ${targetFolderName} with prefix ${prefix}
   `);
 };
 batchRename(parsedArgs);

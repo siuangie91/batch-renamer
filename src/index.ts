@@ -1,15 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import yargs from 'yargs';
-import type { ExpectedArguments } from 'src/types';
+import type { CommandArguments } from 'src/types';
 import {
-  getTargetFolder,
+  getTargetFolderName,
   maybeCreateTargetFolder,
-  retrieveFiles,
-} from './utils';
+} from './utils/target';
+import { retrieveFiles } from './utils/origin';
 import { renameToNewFile } from './utils/rename';
 
-const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
+const parsedArgs: CommandArguments = yargs(process.argv.slice(2))
   .option('origin', {
     alias: 'o',
     type: 'string',
@@ -42,14 +42,14 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
   )
   .parse(process.argv.slice(2));
 
-const batchRename = (args: ExpectedArguments): void => {
+const batchRename = (args: CommandArguments): void => {
   const { origin, prefix, target, startingIndex } = args;
 
   const { name: originFolderName } = path.parse(origin);
 
   const originParent = path.dirname(origin);
 
-  const targetFolder = getTargetFolder({
+  const targetFolderName = getTargetFolderName({
     target,
     originFolderName,
     originParent,
@@ -57,7 +57,7 @@ const batchRename = (args: ExpectedArguments): void => {
 
   console.log(`
     🏁 Origin: ${origin}
-    🎯 Target: ${targetFolder}
+    🎯 Target: ${targetFolderName}
   `);
 
   if (!fs.existsSync(origin)) {
@@ -66,15 +66,15 @@ const batchRename = (args: ExpectedArguments): void => {
 
   console.log('✅ Found folder:', originFolderName, '\n');
 
-  maybeCreateTargetFolder(targetFolder);
+  maybeCreateTargetFolder(targetFolderName);
 
   const files = retrieveFiles(origin);
 
   files.forEach((file: string, index: number): void => {
     renameToNewFile({
       origin,
-      originalFile: file,
-      targetFolder,
+      originalFileName: file,
+      targetFolderName,
       startingIndex,
       index,
       prefix,
@@ -82,7 +82,7 @@ const batchRename = (args: ExpectedArguments): void => {
   });
 
   console.log(`
-    🎉 Done! Renamed files in ${originFolderName} to ${targetFolder} with prefix ${prefix}
+    🎉 Done! Renamed files in ${originFolderName} to ${targetFolderName} with prefix ${prefix}
   `);
 };
 

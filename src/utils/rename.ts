@@ -1,12 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import type { TargetFileName, NewFileRenameInput } from 'src/types';
+import type { TargetFile, NewFileRenameProps } from 'src/types';
 
 const FILE_NUMBER_MIN_DIGITS = 3;
 
 /**
  * Pads the file index with appropriate number of leading zeroes
- * @param fileIndex
  * @returns file index with leading zeroes
  */
 export const padWithLeadingZeroes = (fileIndex: number): string => {
@@ -26,9 +25,6 @@ export const padWithLeadingZeroes = (fileIndex: number): string => {
 
 /**
  * Creates the file number, taking the starting index into account
- * @param startingIndex
- * @param index
- * @returns file index with leading zeros
  */
 export const createFileNumber = (
   startingIndex: number,
@@ -44,15 +40,14 @@ export const createFileNumber = (
 
 /**
  * Creates the file name to rename the file as
- * @param targetFileName
- * @returns new file name
+ * @returns new file name with the format `{prefix}_{fileNumber}{extension}`
  */
 export const createTargetFileName = ({
   prefix,
   extension,
   startingIndex,
   index,
-}: TargetFileName): string => {
+}: TargetFile): string => {
   const fileNumber = createFileNumber(startingIndex, index);
 
   return `${prefix}-${fileNumber}${extension}`;
@@ -60,18 +55,17 @@ export const createTargetFileName = ({
 
 /**
  * Renames a given file
- * @param props
  */
 export const renameToNewFile = ({
   origin,
-  originalFile,
-  targetFolder,
+  originalFileName,
+  targetFolderName,
   startingIndex,
   index,
   prefix,
-}: NewFileRenameInput): void => {
-  const extension = path.extname(originalFile);
-  const basename = path.basename(originalFile, extension);
+}: NewFileRenameProps): void => {
+  const extension = path.extname(originalFileName);
+  const basename = path.basename(originalFileName, extension);
 
   const targetFile = createTargetFileName({
     prefix,
@@ -80,7 +74,7 @@ export const renameToNewFile = ({
     index,
   });
 
-  fs.copyFileSync(`${origin}/${originalFile}`, `${targetFolder}/${targetFile}`);
+  fs.copyFileSync(`${origin}/${originalFileName}`, `${targetFolderName}/${targetFile}`);
 
   console.log('🗂 ', basename, extension, '→ 🗳 ', targetFile);
 };

@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { NewFileRenameProps } from '../../types';
 import {
   padWithLeadingZeroes,
   createFileNumber,
@@ -99,10 +100,10 @@ describe('utils/rename', () => {
 
   describe('renameToNewFile', () => {
     it('copies the original file to a new folder with specified prefix', () => {
-      const args = {
+      const args: NewFileRenameProps = {
         origin: '/originFolder',
-        originalFile: 'original.js',
-        targetFolder: '/targetFolder',
+        originalFileName: 'original.js',
+        targetFolderName: '/targetFolder',
         startingIndex: 0,
         index: 0,
         prefix: 'prefix',
