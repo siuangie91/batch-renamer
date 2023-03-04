@@ -1,28 +1,28 @@
-export type ExpectedArguments = {
+export type CommandArguments = {
   origin: string;
   prefix: string;
-  target: string | null;
   startingIndex: number;
+  target: string | null;
 }
 
 export type TargetFolder = {
-  target: string | null;
   originFolderName: string;
   originParent: string;
+  target: string | null;
 }
 
-export type TargetFileName = {
-  prefix: string;
+export type TargetFile = {
   extension: string;
-  startingIndex: number;
-  index: number;
-}
-
-export type NewFileRenameInput = {
-  origin: string;
-  originalFile: string;
-  targetFolder: string;
-  startingIndex: number;
   index: number;
   prefix: string;
+  startingIndex: number;
+}
+
+export type NewFileRenameProps = {
+  index: number;
+  origin: string;
+  originalFileName: string;
+  prefix: string;
+  startingIndex: number;
+  targetFolder: string;
 }

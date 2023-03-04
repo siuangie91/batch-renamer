@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import yargs from 'yargs';
-import type { ExpectedArguments } from 'src/types';
+import type { CommandArguments } from 'src/types';
 import {
   getTargetFolder,
   maybeCreateTargetFolder,
@@ -9,7 +9,7 @@ import {
 } from './utils';
 import { renameToNewFile } from './utils/rename';
 
-const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
+const parsedArgs: CommandArguments = yargs(process.argv.slice(2))
   .option('origin', {
     alias: 'o',
     type: 'string',
@@ -42,7 +42,7 @@ const parsedArgs: ExpectedArguments = yargs(process.argv.slice(2))
   )
   .parse(process.argv.slice(2));
 
-const batchRename = (args: ExpectedArguments): void => {
+const batchRename = (args: CommandArguments): void => {
   const { origin, prefix, target, startingIndex } = args;
 
   const { name: originFolderName } = path.parse(origin);
