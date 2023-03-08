@@ -68,7 +68,7 @@ describe('utils > rename', () => {
       const prefix = 'prefix';
       const extension = '.png';
 
-      test('when there is a >0 custom starting index', () => {
+      it('when there is a >0 custom starting index', () => {
         const startingIndex = 23;
         const index = 2;
 
@@ -82,7 +82,7 @@ describe('utils > rename', () => {
         expect(result).toBe('prefix-025.png');
       });
 
-      test('when there is no custom starting index (is 0)', () => {
+      it('when there is no custom starting index (is 0)', () => {
         const startingIndex = 0;
         const index = 2;
 
