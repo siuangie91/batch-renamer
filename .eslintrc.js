@@ -42,6 +42,7 @@ module.exports = {
         ts: 'never',
       },
     ],
+    'import/prefer-default-export': 'off',
     'max-len': [
       'error',
       {
@@ -53,8 +54,14 @@ module.exports = {
         ignoreTemplateLiterals: true,
       },
     ],
-    'import/no-cycle': 0,
-    'import/prefer-default-export': 'off',
-    'no-console': 'warn',
+    'no-console': 'off',
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector:
+          'CallExpression[callee.object.name="console"][callee.property.name!=/^(log|warn|error|info|trace)$/]',
+        message: 'Unexpected property on console object was called',
+      },
+    ],
   },
 };
